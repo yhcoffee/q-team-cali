@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YIHUI — Team Calibration</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nixie+One&family=DM+Sans:wght@400;500;600;700&display=swap');
+:root{--bg:#f6f6f4;--paper:#fff;--ink:#171717;--muted:#777;--line:#dededa;--soft:#efefec;--good:#376b53;--bad:#a44c43;--amber:#996f34;--rad:13px}*{box-sizing:border-box}html{scrollbar-gutter:stable}body{overflow-y:scroll;margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 'DM Sans',Arial,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.35;cursor:not-allowed}a{color:inherit}.serif,.brand,h1,h2,.metric strong{font-family:'Nixie One',Georgia,serif}.app{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr)}aside{background:#f0f0ed;border-right:1px solid var(--line);height:100vh;position:sticky;top:0;display:flex;flex-direction:column;padding:26px 16px 14px;gap:19px}.brand{font-size:23px;letter-spacing:.16em;margin:0 9px}.tiny{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#888;font-weight:700}.aside-label{display:flex;justify-content:space-between;align-items:center;margin:0 9px}.side-list{overflow:auto;flex:1;min-height:90px}.side-link{display:flex;align-items:center;gap:10px;padding:11px 12px;width:100%;text-align:left;border:1px solid transparent;background:none;border-radius:9px;margin:2px 0;color:#444}.side-link:hover{background:#e6e6e2}.side-link.active{background:#fff;border-color:#ddd;color:#111;box-shadow:0 1px 2px #00000005}.dot{width:9px;height:9px;border-radius:50%;background:#aaa;flex:none}.dot.good{background:var(--good)}.dot.warn{background:var(--amber)}.avatar{width:29px;height:29px;background:#dcdcd7;border-radius:50%;display:grid;place-items:center;color:#555;font-size:11px;font-weight:700;flex:none}.side-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.side-meta{color:#888;font-size:11px}.side-footer{border-top:1px solid var(--line);padding-top:14px;display:grid;gap:6px}.main{min-width:0;padding:25px clamp(18px,3.5vw,54px) 75px;max-width:1550px;width:100%;margin:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;min-height:40px}.breadcrumbs{color:#888;font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.btn{border:1px solid #d5d5d1;border-radius:8px;background:#fff;padding:9px 14px;font-weight:600;color:#222;min-height:38px}.btn:hover{background:#f0f0ee}.btn.black{background:#171717;color:#fff;border-color:#171717}.btn.black:hover{background:#363636}.btn.ghost{background:transparent;border-color:transparent}.btn.small{padding:6px 10px;min-height:31px;font-size:12px}.btn.danger{color:var(--bad)}.iconbtn{border:1px solid #ddd;background:#fff;border-radius:8px;min-height:32px;padding:4px 9px}.page-title{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:32px 0 23px}.page-title h1{font-size:clamp(29px,3.4vw,43px);font-weight:400;letter-spacing:-.02em;margin:0 0 5px}.sub{color:#777;margin:0}.grid{display:grid;gap:14px}.grid.metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.metric,.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--rad)}.metric{padding:19px 22px}.metric strong{font-size:29px;display:block;font-weight:400;margin-top:8px}.panel{padding:23px}.panel + .panel{margin-top:14px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.section-title h2,.section-title h3{font-size:21px;font-weight:400;margin:0}.muted{color:#777}.light{font-size:12px;color:#888}.pill{font-size:11px;border:1px solid #dcdcd7;border-radius:99px;padding:4px 9px;color:#666;white-space:nowrap}.pill.good{border-color:#c7dbce;color:var(--good);background:#f4faf5}.pill.bad{border-color:#eccac8;color:var(--bad);background:#fcf6f5}.pill.amber{border-color:#e7d8c2;color:var(--amber);background:#fdf9f3}.two{grid-template-columns:minmax(0,1.3fr) minmax(275px,.9fr)}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.empty{padding:45px 20px;text-align:center;color:#888}.empty strong{color:#333;display:block;font-size:16px;margin-bottom:8px}.person-row{display:grid;grid-template-columns:minmax(0,1.3fr) 100px 100px 95px 90px;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid #eee}.person-row:last-child{border:0}.person-row.head{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#888;padding:8px 0}.namecell{display:flex;align-items:center;gap:12px;min-width:0}.namecell b{font-size:14px}.mini-link{border:0;background:none;padding:0;text-align:left;font-weight:600;text-decoration:underline;text-underline-offset:3px}.tag{display:inline-flex;align-items:center;gap:5px}.trend{font-weight:700;font-size:12px}.trend.up{color:var(--good)}.trend.down{color:var(--bad)}.trend.flat{color:#777}.score-ring{display:inline-flex;align-items:baseline;gap:2px;font-weight:700}.score-ring small{color:#aaa;font-weight:400}.progress{height:5px;background:#e9e9e6;border-radius:5px;overflow:hidden}.progress span{display:block;height:100%;background:#222;border-radius:5px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:grid;gap:6px;min-width:0}.field label,.field-label{font-size:11px;font-weight:700;letter-spacing:.075em;text-transform:uppercase;color:#666}.field input,.field select,.field textarea,.input{width:100%;padding:10px 12px;background:#fff;border:1px solid #d5d5d1;border-radius:8px;color:#222;outline:none}.field textarea{resize:vertical;min-height:75px}.field input:focus,.field select:focus,.field textarea:focus{border-color:#666}.form-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:18px}.notice{border-left:2px solid #999;background:#f4f4f1;padding:12px 15px;color:#555;font-size:13px}.assess-grid{display:grid;grid-template-columns:minmax(0,1fr) 310px;align-items:start;gap:16px}.sticky{position:sticky;top:22px}.domain{border:1px solid var(--line);border-radius:var(--rad);background:#fff;margin-bottom:14px;overflow:hidden}.domain-head{padding:19px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}.domain-head h3{font-size:19px;font-weight:400;margin:0;font-family:'Nixie One',Georgia,serif}.criterion{padding:16px 20px;border-bottom:1px solid #f0f0ed}.criterion:last-child{border-bottom:0}.criterion-top{display:flex;justify-content:space-between;align-items:start;gap:10px}.criterion-name{font-weight:700;margin-bottom:3px}.criterion-desc{color:#888;font-size:12px;max-width:650px}.ratings{display:flex;gap:5px;margin:12px 0 4px;flex-wrap:wrap}.rating{border:1px solid #ddd;background:#fff;border-radius:7px;padding:7px 11px;min-height:34px;font-size:12px;color:#777}.rating.selected{background:#191919;border-color:#191919;color:#fff}.rating.na.selected{background:#e7e7e4;border-color:#bbb;color:#555}.rating:hover:not(.selected){background:#f1f1ee}.note-input{border:0;border-bottom:1px solid #eee;padding:7px 0;width:100%;outline:none;background:transparent;font-size:12px;color:#444}.note-input:focus{border-bottom-color:#888}.small-stack{display:grid;gap:10px}.stat-line{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #eee}.stat-line:last-child{border:0}.barline{display:grid;grid-template-columns:125px 1fr 43px;gap:12px;align-items:center;font-size:12px;margin:12px 0}.barline .progress{height:7px}.barline .progress span.good{background:var(--good)}.barline .progress span.bad{background:var(--bad)}.insight{padding:12px 0;border-bottom:1px solid #eee}.insight:last-child{border:0}.insight b{display:block;margin-bottom:4px;font-size:13px}.plan-item{border:1px solid #e1e1de;border-radius:9px;padding:15px;margin-bottom:10px;background:white}.plan-item .row{display:flex;justify-content:space-between;gap:10px}.plan-item h4{margin:0 0 7px;font-size:14px}.plan-item textarea{width:100%;min-height:58px;padding:9px;border:1px solid #ddd;border-radius:7px;resize:vertical}.plan-item select{border:1px solid #ddd;border-radius:7px;padding:7px;background:#fff}.timeline{border-left:1px solid #ddd;margin-left:10px;padding-left:20px}.event{position:relative;padding:4px 0 20px}.event:before{content:'';position:absolute;left:-25px;top:8px;width:9px;height:9px;border:2px solid #fff;border-radius:50%;background:#555;box-shadow:0 0 0 1px #ccc}.history-card{border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:11px;background:#fff}.history-card .history-top{display:flex;justify-content:space-between;gap:12px;align-items:start}.history-card .history-top .pill{display:inline-flex;align-items:center;margin-left:9px;vertical-align:middle}.history-card .history-top .light{margin-top:9px;line-height:1.55}.domain-table{width:100%;border-collapse:collapse}.domain-table th{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#888;text-align:left;padding:12px 8px;border-bottom:1px solid var(--line)}.domain-table td{padding:12px 8px;border-bottom:1px solid #eee;font-size:13px}.domain-table tr:last-child td{border:0}.member-tab-content{min-height:calc(100vh - 305px);width:100%;min-width:0}.member-tab-content>.panel{width:100%}.tabs{display:flex;gap:5px;border-bottom:1px solid #ddd;margin:22px 0 20px;overflow:auto}.tab{border:0;background:transparent;padding:12px 16px;border-bottom:2px solid transparent;color:#777;white-space:nowrap;font-size:13px;font-weight:700}.tab.active{border-color:#171717;color:#171717}.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}.divider{height:1px;background:#e7e7e3;margin:18px 0}.hide{display:none!important}.modal-bg{position:fixed;inset:0;background:#0007;display:grid;place-items:center;padding:20px;z-index:30}.modal{background:#fff;border-radius:14px;width:min(100%,540px);max-height:90vh;overflow:auto;padding:25px;box-shadow:0 20px 80px #0002}.modal h2{font-size:25px;font-weight:400;margin:0 0 10px}.toast{position:fixed;bottom:22px;right:22px;background:#191919;color:#fff;border-radius:9px;padding:11px 18px;z-index:50;box-shadow:0 8px 24px #0002}.sidebar-toggle{display:none}.print-only{display:none}.question{border:1px solid #ddd;border-radius:9px;padding:12px;margin-top:9px}.question input{margin-top:7px}.footer-note{margin-top:30px;font-size:11px;color:#999}.nobr{white-space:nowrap}
+@media(max-width:1120px){.app{grid-template-columns:205px 1fr}.grid.metrics{grid-template-columns:repeat(2,1fr)}.assess-grid{grid-template-columns:1fr}.sticky{position:static}.two{grid-template-columns:1fr}}
+@media(max-width:730px){.app{display:block}aside{position:fixed;inset:0 auto 0 0;width:260px;z-index:20;transform:translateX(-105%);transition:transform .2s;box-shadow:12px 0 35px #0001}aside.open{transform:translateX(0)}.sidebar-toggle{display:inline-flex}.main{padding:14px 15px 50px}.page-title{margin:25px 0 17px;align-items:start}.page-title h1{font-size:30px}.panel{padding:17px}.grid.metrics{grid-template-columns:repeat(2,1fr);gap:9px}.metric{padding:14px}.metric strong{font-size:24px}.columns,.three{grid-template-columns:1fr}.person-row{grid-template-columns:minmax(0,1fr) 70px 70px}.person-row>*:nth-child(4),.person-row>*:nth-child(5){display:none}.person-row.head{font-size:9px}.topbar .actions{gap:4px}.btn{padding:8px 11px}.barline{grid-template-columns:100px 1fr 40px}.domain-head{padding:15px}.criterion{padding:14px}.modal{padding:20px}}
+@media print{body{background:#fff;font-size:11px}aside,.topbar,.tabs,.no-print,.btn,.footer-note{display:none!important}.app{display:block}.main{padding:0;max-width:100%}.panel,.domain,.history-card{border:1px solid #ddd;break-inside:avoid;box-shadow:none;padding:12px}.page-title{margin:0 0 15px}.page-title h1{font-size:26px}.print-only{display:block}.grid.metrics{grid-template-columns:repeat(4,1fr)}.metric{padding:10px}.metric strong{font-size:18px}.two,.assess-grid{display:block}.rating{padding:3px 6px}.rating:not(.selected){opacity:.35}.field textarea{border:0}.no-print-text{display:none}}
+.drag-handle{display:inline-flex;align-items:center;justify-content:center;color:#aaa;font-size:19px;line-height:1;cursor:grab;user-select:none;flex:none;width:16px}.draggable-roster{cursor:pointer}.draggable-roster:hover{background:#fafaf8}.drag-handle{touch-action:none}.drag-handle:active{cursor:grabbing}.dragging{opacity:.4}.drag-over{box-shadow:inset 0 3px 0 #222;background:#f5f5f2}.plan-progress{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #eee;margin-top:12px;padding-top:12px}.compact-plan .field textarea{min-height:54px}.compact-plan .field input{font-weight:600}.compact-plan{padding:17px}.field textarea{line-height:1.55}.field textarea:focus{box-shadow:0 0 0 2px #17171710}@media(max-width:730px){.drag-handle{font-size:20px}.plan-progress{flex-wrap:wrap}}
+.criterion-note{margin-top:9px}.criterion-note summary{font-size:12px;color:#888;cursor:pointer;width:max-content;max-width:100%;padding:3px 0}.criterion-note summary:hover{color:#222}.criterion-note textarea{width:100%;min-height:68px;resize:vertical;margin-top:7px;border:1px solid #ddd;background:#fafaf9;border-radius:8px;padding:10px 12px;font:inherit;font-size:13px}.criterion-note textarea:focus{outline:1px solid #777}
+/* Staff-facing A4 report only. Management assessment stays on screen. */
+#staffPrintRoot{display:none}
+@page{size:A4 portrait;margin:0}
+@media print{
+  html,body{width:210mm!important;margin:0!important;padding:0!important;background:white!important}
+  body>.app,body>#modalRoot,body>#toastRoot{display:none!important}
+  #staffPrintRoot{display:block!important}
+  .staff-sheet{width:210mm;height:297mm;padding:16mm 17mm 14mm;background:#fff;color:#151515;font-family:Arial,Helvetica,sans-serif;font-size:10pt;line-height:1.43;overflow:hidden;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .staff-sheet *{box-sizing:border-box}
+  .staff-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1.3pt solid #161616;padding-bottom:7mm;gap:8mm}
+  .staff-brand{font-family:Georgia,serif;letter-spacing:.14em;font-size:24pt;line-height:1}
+  .staff-type{text-transform:uppercase;font-size:8pt;letter-spacing:.13em;color:#555;text-align:right;line-height:1.6}
+  .staff-person{padding:8mm 0 6mm;display:flex;justify-content:space-between;align-items:end;gap:8mm}
+  .staff-person h1{font-family:Georgia,serif;font-size:22pt;font-weight:400;margin:0 0 1mm;line-height:1.15}
+  .staff-kicker{font-size:8pt;letter-spacing:.13em;text-transform:uppercase;color:#777;margin:0 0 2mm}
+  .staff-meta{font-size:9pt;color:#666;text-align:right}
+  .staff-intro{font-size:9.5pt;color:#444;margin:0 0 5mm;max-width:170mm}
+  .staff-section{margin-top:6.5mm;break-inside:avoid;page-break-inside:avoid}
+  .staff-section-head{display:flex;align-items:center;gap:4mm;border-bottom:1px solid #d8d8d8;padding-bottom:2mm;margin-bottom:3mm}
+  .staff-section-head b{font-family:Georgia,serif;font-weight:400;font-size:14.5pt}
+  .staff-section-head span{font-size:8pt;color:#777;margin-left:auto}
+  .staff-strength-grid{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+  .staff-strength{background:#fafaf9;border:1px solid #e8e8e5;padding:3.5mm;min-height:16mm;break-inside:avoid}
+  .staff-strength strong{display:block;font-size:10pt;margin-bottom:1mm}
+  .staff-strength p{margin:0;font-size:8.6pt;color:#555;line-height:1.38}
+  .staff-story{white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 3mm;font-size:9.2pt}
+  .staff-focus{padding:3mm 0 3.5mm;display:grid;grid-template-columns:7mm 1fr;gap:3mm;border-bottom:1px solid #e6e6e6;break-inside:avoid}
+  .staff-focus:last-child{border-bottom:0}
+  .staff-number{width:6mm;height:6mm;border:1px solid #aaa;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8pt;color:#666}
+  .staff-focus h3{margin:0 0 1.5mm;font-size:10pt;line-height:1.3}
+  .staff-focus p{margin:0 0 1mm;font-size:8.7pt;line-height:1.36;overflow-wrap:anywhere}
+  .staff-focus p b{font-weight:700}
+  .staff-next{border-top:1px solid #d8d8d8;padding:4mm 0;display:grid;grid-template-columns:1fr;gap:5mm;align-items:center;margin-top:6mm}
+  .staff-next b{display:block;font-size:9.5pt}
+  .staff-next p{font-size:8.5pt;color:#555;margin:1mm 0 0}
+  /* Uniform sections for printed strengths and priorities. */
+  .staff-review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5mm;align-items:stretch}
+  .staff-review-item{border:1px solid #dededb;background:#fff;padding:3mm 3.4mm;break-inside:avoid;min-width:0}
+  .staff-review-item h3{margin:0 0 1mm;font-size:9.4pt;font-weight:700;line-height:1.28;overflow-wrap:anywhere}
+  .staff-review-item p{margin:0 0 .8mm;font-size:8.2pt;line-height:1.32;color:#4a4a4a;overflow-wrap:anywhere}
+  .staff-review-item p:last-child{margin-bottom:0}
+  .staff-dense .staff-review-grid{gap:1.8mm}
+  .staff-dense .staff-review-item{padding:2.1mm 2.8mm}
+  .staff-dense .staff-review-item h3{font-size:8.7pt;margin-bottom:.5mm}
+  .staff-dense .staff-review-item p{font-size:7.7pt;line-height:1.23}
+  .staff-review-item p{white-space:normal}
+  .staff-dense .staff-section{margin-top:4mm}
+
+  .staff-footer{margin-top:6mm;border-top:1px solid #d8d8d8;padding-top:3mm;color:#777;font-size:8pt;display:flex;justify-content:space-between;gap:5mm}
+}
+
+.signal-note{white-space:pre-wrap;overflow-wrap:anywhere;color:#555;font-size:12px;line-height:1.45;margin:6px 0 0}
+/* Assessment columns share the normal document scroll. A sticky insights column taller than the viewport would pin its top until the form ended. */
+.assess-grid > .small-stack.sticky{position:static;top:auto}
+
+.assessment-language{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding-bottom:17px;margin-bottom:17px;flex-wrap:wrap}.lang-controls{display:flex;gap:5px}.criterion-note.needs-observation summary{color:#8a4d26;font-weight:700}.criterion-note.needs-observation textarea{border-color:#d1a783}.required-tip{font-size:11px;color:#8a4d26;margin:6px 0 0}.language-toggle{display:inline-grid;grid-template-columns:39px 39px;align-items:center;gap:1px;width:87px;height:32px;padding:3px;border:1px solid #d5d5d1;border-radius:8px;background:#fff;color:#777;cursor:pointer}.language-toggle::before{content:none!important}.language-toggle span{display:flex;align-items:center;justify-content:center;height:24px;border-radius:5px;font-size:12px;font-weight:700;color:#777;background:transparent;transition:background-color .16s ease,color .16s ease}.language-toggle:not(.zh) span:first-child,.language-toggle.zh span:last-child{background:#171717;color:#fff}.language-toggle:focus-visible{outline:2px solid #555;outline-offset:2px}
+
+body.cloud-locked .app{display:none!important}
+.cloud-auth{min-height:100vh;display:grid;place-items:center;padding:28px;background:#f6f6f4}
+.cloud-login{width:min(100%,420px);background:white;border:1px solid #dededa;border-radius:13px;padding:32px}
+.cloud-login h1{font-family:'Nixie One',Georgia,serif;font-size:33px;font-weight:400;margin:0 0 8px;letter-spacing:.1em}
+.cloud-login p{color:#777;font-size:13px}
+.cloud-login form{display:grid;gap:14px;margin-top:22px}
+.cloud-login label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#444}
+.cloud-login input{padding:11px 12px;border:1px solid #d5d5d1;border-radius:7px;font:inherit}
+.cloud-login button{background:#171717;color:#fff;border:0;border-radius:7px;padding:11px;font:inherit;font-weight:700;cursor:pointer}
+.cloud-login button:disabled{opacity:.5}
+.cloud-message{margin-top:13px;color:#9b3d35;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.cloud-user{font-size:11px;color:#777;display:flex;align-items:center;gap:8px}
+.cloud-user button{font-size:11px;border:1px solid #ddd;background:#fff;padding:6px 9px;border-radius:7px;color:#333}
+</style>
+</head>
+<body class="cloud-locked"><div id="cloudAuth" class="cloud-auth"><div class="cloud-login"><h1>YIHUI</h1><div class="tiny">TEAM CALIBRATION · MANAGER ACCESS</div><p>Sign in with an approved management account to access team assessments.</p><form id="cloudLoginForm"><label>Email<input id="cloudEmail" type="email" autocomplete="username" required></label><label>Password<input id="cloudPassword" type="password" autocomplete="current-password" required></label><button id="cloudLoginButton" type="submit">Sign in</button></form><div class="cloud-message" id="cloudMessage" role="status">Connecting to Firebase…</div><button id="cloudSignOut" type="button" style="background:#eee;color:#222;margin-top:12px;display:none">Sign out / switch account</button></div></div><div class="app"><aside id="sidebar"><div class="brand">YIHUI</div><div class="aside-label"><span class="tiny">TEAM CALIBRATION</span></div><button class="side-link" id="dashboardLink"><span style="font-size:17px">▦</span><span class="side-name">Overview</span></button><div class="aside-label"><span class="tiny">BARISTAS</span><button class="iconbtn" id="addPersonSide" title="Add barista">＋</button></div><div class="side-list" id="peopleList"></div><div class="side-footer"><button class="side-link" id="settingsLink"><span>⚙</span><span>Data & backup</span></button><div class="light" style="padding:0 11px">Saved in this browser · export backups regularly</div></div></aside><main class="main"><div class="topbar"><div class="actions"><button class="btn small sidebar-toggle" id="menuButton">☰ Menu</button><span class="breadcrumbs" id="breadcrumbs">Overview</span></div><div class="actions"><span class="pill" id="saveState">Local storage</span><button type="button" class="language-toggle" id="languageToggle" style="display:none" aria-label="Switch assessment language between English and Chinese" aria-pressed="false" title="English / 中文"><span>EN</span><span>中文</span></button><button class="btn small" id="exportTop">Export JSON</button><span class="cloud-user" id="cloudUser"></span></div></div><div id="content"></div><div class="footer-note">YIHUI · TEAM CALIBRATION · Management use only</div></main></div><div id="modalRoot"></div><div id="toastRoot"></div>
+<div id="staffPrintRoot" aria-hidden="true"></div>
+<script>
+'use strict';
+const KEY='yihui_calibration_v1';
+const DOMAINS=[
+{id:'recipes',title:'Recipe knowledge & consistency',short:'Recipes',items:[
+{id:'recipe_ingredients',name:'Ingredient recall',desc:'Knows ingredients, syrups, allergens and intended flavor of current menu.',action:'Review and recall current drink builds; confirm ingredients and allergens using the approved recipe book.'},
+{id:'recipe_measure',name:'Measurements & sweetness standards',desc:'Uses exact gram/volume amounts and approved sweetness adjustments rather than guessing.',action:'Practice measured syrup and sweetness modifications with a lead until repeatable.'},
+{id:'recipe_execution',name:'Build sequence & presentation',desc:'Follows method, temperature, dilution, garnishes and presentation consistently.',action:'Execute five selected recipes to standard, including sequence and presentation.'},
+{id:'recipe_mods',name:'Customization judgment',desc:'Knows approved modifications, when to consult a lead, and when to explain a limitation.',action:'Review customization policy and role-play common exceptions with a lead.'}]},
+{id:'coffee',title:'Coffee technical skills',short:'Coffee',items:[
+{id:'coffee_dial',name:'Espresso dialing & adjustments',desc:'Tastes, measures and makes purposeful dialing decisions with clear handoffs.',action:'Complete a guided dial-in and explain changes to dose, yield and grind.'},
+{id:'coffee_extraction',name:'Shot consistency',desc:'Maintains preparation, puck technique, shot parameters and checks quality.',action:'Run a timed consistency drill across successive drinks with a lead.'},
+{id:'coffee_milk',name:'Milk texture & temperature',desc:'Produces stable microfoam, appropriate temperature and correct milk handling.',action:'Practice consecutive milk drinks with texture and temperature checks.'},
+{id:'coffee_finish',name:'Latte art & final quality check',desc:'Matches intended pour quality and checks drink before handoff.',action:'Practice the target pour and perform a finish-quality checklist.'}]},
+{id:'workflow',title:'Workflow & efficiency',short:'Workflow',items:[
+{id:'flow_priority',name:'Order prioritization',desc:'Sequences drinks logically without sacrificing quality or ignoring ticket order.',action:'Shadow a lead during rush sequencing; practice calling the next steps aloud.'},
+{id:'flow_pace',name:'Pace under volume',desc:'Maintains deliberate pace and quality during busy stretches.',action:'Run guided peak-volume practice with a defined quality and timing target.'},
+{id:'flow_handoff',name:'Communication & handoffs',desc:'Clearly communicates needs, drink status, shifts and station changes.',action:'Use a standard verbal handoff during every station or shift transition.'},
+{id:'flow_awareness',name:'Station awareness',desc:'Notices upcoming needs, bottlenecks and opportunities to assist.',action:'Practice proactive checks for queue, stock and teammate needs during service.'}]},
+{id:'clean',title:'Cleanliness & organization',short:'Cleanliness',items:[
+{id:'clean_glass',name:'Glassware & equipment care',desc:'Glassware is fully clean and dry; tools and equipment are handled correctly.',action:'Complete glassware and equipment quality checks at opening and handoff.'},
+{id:'clean_station',name:'Station reset & sanitation',desc:'Maintains a clean, food-safe and guest-ready station throughout the shift.',action:'Use a station reset checklist after each rush and before handoff.'},
+{id:'clean_stock',name:'Restocking & preparation',desc:'Maintains pars, condiments, beans, lids and morning prep without reminders.',action:'Own assigned prep and par checks for the next three scheduled shifts.'},
+{id:'clean_close',name:'Shift transitions & closing standards',desc:'Completes assigned reset and closing tasks without pre-closing guest service.',action:'Follow the closing/handoff standard and have a lead spot-check completion.'}]},
+{id:'service',title:'Hospitality & judgment',short:'Hospitality',items:[
+{id:'service_guest',name:'Guest communication',desc:'Communicates clearly, respectfully and with appropriate attentiveness.',action:'Practice greeting, explaining drinks and completing handoffs with consistent language.'},
+{id:'service_recover',name:'Service recovery',desc:'Responds calmly to incorrect drinks, dissatisfaction and remakes.',action:'Role-play two service recovery scenarios and follow the remake policy.'},
+{id:'service_mod',name:'Explaining modifications',desc:'Balances guest preferences with recipe integrity, without improvising policy.',action:'Role-play sweetness requests and signature drink modifications.'},
+{id:'service_ownership',name:'Judgment & escalation',desc:'Resolves routine issues and escalates exceptions at the right time.',action:'Review decision boundaries and practice when to ask a shift lead.'}]},
+{id:'team',title:'Teamwork & ownership',short:'Teamwork',items:[
+{id:'team_support',name:'Support & collaboration',desc:'Steps in appropriately and helps teammates without creating confusion.',action:'Agree with the shift lead on proactive support actions for busy shifts.'},
+{id:'team_feedback',name:'Receptiveness to feedback',desc:'Accepts coaching, clarifies expectations and puts feedback into practice.',action:'Set one coaching goal and check in on it at the next two shifts.'},
+{id:'team_follow',name:'Follow-through & accountability',desc:'Completes assigned tasks reliably and flags unfinished work before leaving.',action:'Use a self-check and verbal confirmation at each shift handoff.'},
+{id:'team_standards',name:'Adherence to shared standards',desc:'Uses approved SOPs consistently rather than substituting personal habit.',action:'Review the current SOP and demonstrate consistent compliance across shifts.'}]} ,
+{id:'leadership',title:'People management & shift leadership',short:'Leadership',leadershipOnly:true,items:[
+{id:'lead_delegate',name:'Delegation & ownership',desc:'Assigns tasks with a clear owner, priority and expected standard; confirms completion rather than doing everything personally.',action:'Assign specific station responsibilities at shift start and check completion at handoff.'},
+{id:'lead_develop',name:'Coaching & developing others',desc:'Provides timely, specific feedback, demonstrates standards and helps teammates build independence.',action:'Coach one observed skill gap on shift, demonstrate the standard and revisit execution.'},
+{id:'lead_supervise',name:'Supervision & follow-through',desc:'Monitors breaks, clock-ins, recipe execution, cleanliness and task completion; addresses misses promptly.',action:'Use structured shift checks and follow up on incomplete tasks before the next handoff.'},
+{id:'lead_priorities',name:'Setting consistent shift priorities',desc:'Communicates the order of operations at opening, rushes and handoffs so the team knows what matters first.',action:'Outline shift priorities at handoff and update the team when service conditions change.'},
+{id:'lead_feedback',name:'Communication & accountability',desc:'Corrects inconsistent work respectfully and directly; applies the same standards to everyone and closes the loop.',action:'Address one concrete standards gap with a clear expectation and follow-up.'}
+]}];
+const allItems=DOMAINS.flatMap(d=>d.items.map(x=>({...x,domainId:d.id,domainTitle:d.title,domainShort:d.short})));
+let data=load(),state={view:'dashboard',personId:null,assessmentId:null,tab:'overview',filter:'all'},draft=null,dirty=false;
+function uid(){return 'id_'+Math.random().toString(36).slice(2,10)+'_'+Date.now().toString(36)}
+function load(){try{let x=JSON.parse(localStorage.getItem(KEY));if(x&&Array.isArray(x.people)&&Array.isArray(x.assessments))return x}catch(e){}return {version:1,people:[],assessments:[],updatedAt:null}}
+function persist(){
+  data.updatedAt=new Date().toISOString();
+  try{
+    localStorage.setItem(KEY,JSON.stringify(data));
+    document.getElementById('saveState').textContent='Syncing to Firebase…';
+    if(typeof window.__calibrationCloudSave!=='function')throw Error('Cloud connection is unavailable.');
+    window.__calibrationCloudSave(structuredClone(data));
+    return true;
+  }catch(e){document.getElementById('saveState').textContent='Not synced — export backup'; alert('Unable to queue cloud save: '+e.message); return false}
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(d){if(!d)return '—';return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+function dateNow(){let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function quarter(d){let x=new Date((d||dateNow())+'T12:00:00');return 'Q'+(Math.floor(x.getMonth()/3)+1)+' '+x.getFullYear()}
+function isLeadershipRole(p){return ['Shift Lead','Manager'].includes(p?.role)}
+function assessmentDomains(a){const included=a?.leadershipTrack===true||(a?.leadershipTrack==null&&isLeadershipRole(person(a?.personId)));return DOMAINS.filter(d=>!d.leadershipOnly||included)}
+function assessmentItems(a){const ids=new Set(assessmentDomains(a).map(d=>d.id));return allItems.filter(it=>ids.has(it.domainId))}
+function scores(a){return assessmentItems(a).map(it=>Number(a.ratings?.[it.id])).filter(n=>n>=1&&n<=4)}
+function avg(ns){return ns.length?ns.reduce((a,b)=>a+b,0)/ns.length:null}
+function mean(a){return avg(scores(a))}
+function oneDomain(a,d){return avg(d.items.map(i=>Number(a.ratings?.[i.id])).filter(n=>n>=1&&n<=4))}
+function scored(a){return scores(a).length}
+function pct(v){return v==null?'—':v.toFixed(2)}
+function latest(p){return data.assessments.filter(a=>a.personId===p.id&&a.status==='final').sort(sortDate)[0]||null}
+function previous(p){return data.assessments.filter(a=>a.personId===p.id&&a.status==='final').sort(sortDate)[1]||null}
+function sortDate(a,b){return (b.date||'').localeCompare(a.date||'')||(b.updatedAt||'').localeCompare(a.updatedAt||'')}
+function trend(a,b){if(!a||!b)return null;const matched=assessmentItems(a).filter(it=>assessmentItems(b).some(j=>j.id===it.id)&&[1,2,3,4].includes(Number(a.ratings?.[it.id]))&&[1,2,3,4].includes(Number(b.ratings?.[it.id])));if(!matched.length)return null;return avg(matched.map(i=>Number(a.ratings[i.id])-Number(b.ratings[i.id])))}
+function trendHTML(n){if(n===null)return '<span class="muted">—</span>';let cls=n>.15?'up':n<-.15?'down':'flat';return `<span class="trend ${cls}">${n>.15?'↑ Improving':n<-.15?'↓ Sliding':'→ Stable'} <span style="font-weight:400">(${n>0?'+':''}${n.toFixed(2)})</span></span>`}
+function initials(name){return String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0].toUpperCase()).join('')}
+function person(id){return data.people.find(p=>p.id===id)}
+function assessments(p){return data.assessments.filter(a=>a.personId===p.id).sort(sortDate)}
+function getStrong(a){return assessmentItems(a).filter(it=>Number(a.ratings?.[it.id])===4)}
+function getStrongDomains(a){return assessmentDomains(a).filter(d=>{const values=d.items.map(it=>Number(a.ratings?.[it.id])).filter(n=>n>=1&&n<=4);return values.length>=Math.ceil(d.items.length/2)&&values.every(n=>n>=3)&&avg(values)>=3.5})}
+function getGaps(a){return assessmentItems(a).filter(it=>[1,2].includes(Number(a.ratings?.[it.id]))).sort((x,y)=>Number(a.ratings[x.id])-Number(a.ratings[y.id]))}
+function getCoachingSignals(a){return assessmentItems(a).filter(it=>[1,2].includes(Number(a.ratings?.[it.id]))||String(a.notes?.[it.id]||'').trim()).sort((x,y)=>{const ax=[1,2].includes(Number(a.ratings?.[x.id]))?0:1,ay=[1,2].includes(Number(a.ratings?.[y.id]))?0:1;return ax-ay})}
+function coachingSignalHTML(a){const entries=getCoachingSignals(a);return entries.length?entries.map(it=>{const rating=Number(a.ratings?.[it.id]),low=[1,2].includes(rating),note=String(a.notes?.[it.id]||'').trim();return `<div class="insight"><b>${esc(zhName(it))}</b><span class="light">${esc(assessmentLanguage==='zh'?ZH_CRITERIA[it.domainId]?.[1]||it.domainShort:it.domainShort)}${low?' · '+rating+'/4':''}${note&&!low?' · '+lang('Observation','观察记录'):''}</span>${note?`<p class="signal-note">${esc(note)}</p>`:''}</div>`}).join(''): `<p class="light">${lang('Low ratings and recorded observations will appear here.','低评分项目和已填写的观察记录将在此显示。')}</p>`}
+function toast(s){let t=document.createElement('div');t.className='toast';t.textContent=s;document.getElementById('toastRoot').append(t);setTimeout(()=>t.remove(),3000)}
+function escapeSide(){document.getElementById('sidebar').classList.remove('open')}
+function routeHash(s){
+ if(s.view==='person')return '#/member/'+encodeURIComponent(s.personId||'')+'/'+(s.tab==='history'?'history':'overview');
+ if(s.view==='assessment')return '#/assessment/'+encodeURIComponent(s.assessmentId||'');
+ if(s.view==='settings')return '#/settings';
+ return '#/overview';
+}
+function routeFromHash(){
+ const parts=location.hash.replace(/^#\/?/,'').split('/');
+ const id=parts[1]?decodeURIComponent(parts[1]):null;
+ if(parts[0]==='member'&&person(id))return {view:'person',personId:id,assessmentId:null,tab:parts[2]==='history'?'history':'overview'};
+ if(parts[0]==='assessment'){
+  const a=data.assessments.find(x=>x.id===id);
+  if(a&&person(a.personId))return {view:'assessment',personId:a.personId,assessmentId:a.id,tab:'overview'};
+ }
+ if(parts[0]==='settings')return {view:'settings',personId:null,assessmentId:null,tab:'overview'};
+ return {view:'dashboard',personId:null,assessmentId:null,tab:'overview'};
+}
+function setRoute(next,replace=false){
+ const url=routeHash(next);
+ const fn=replace?'replaceState':'pushState';
+ if(location.hash===url&& !replace)return;
+ try{history[fn]({yihuiCalibration:true,...next},'',url)}catch(e){history[fn]({yihuiCalibration:true,...next},'')}
+}
+function navigate(view,pid=null,aid=null,tab='overview'){
+ if(dirty&&!confirm('Discard unsaved changes to this assessment?'))return;
+ const next={view,personId:pid,assessmentId:aid,tab};
+ const samePersonTab=state.view==='person'&&view==='person'&&state.personId===pid;
+ dirty=false;draft=null;state={...state,...next};setRoute(next);
+ escapeSide();render();
+ if(!samePersonTab)window.scrollTo(0,0);
+}
+function restoreBrowserRoute(){
+ const next=routeFromHash();
+ if(dirty&&!confirm('Discard unsaved changes to this assessment?')){
+  // Restore the current view in the address bar without discarding the draft.
+  setRoute(state);return;
+ }
+ dirty=false;draft=null;state={...state,...next};escapeSide();render();window.scrollTo(0,0);
+}
+function renderSidebar(){document.getElementById('dashboardLink').classList.toggle('active',state.view==='dashboard');document.getElementById('settingsLink').classList.toggle('active',state.view==='settings');document.getElementById('peopleList').innerHTML=data.people.slice().map(p=>{let a=latest(p);return `<button type="button" data-drag-person="${esc(p.id)}" class="side-link ${state.personId===p.id?'active':''}" data-person="${esc(p.id)}"><span class="drag-handle" draggable="true" data-drag-handle="${esc(p.id)}" title="Drag to reorder" aria-label="Drag to reorder">⠿</span><span class="avatar">${esc(initials(p.name))}</span><span class="side-name">${esc(p.name)}</span><span class="side-meta">${a?'●':'○'}</span></button>`}).join('')||'<div class="light" style="padding:13px">No baristas added yet.</div>';document.querySelectorAll('[data-person]').forEach(b=>b.onclick=()=>navigate('person',b.dataset.person));document.getElementById('breadcrumbs').textContent=state.view==='dashboard'?'Overview':state.view==='settings'?'Data & backup':(person(state.personId)?.name||'Barista')+(state.view==='assessment'?' / Assessment':'')}
+function render(){renderSidebar();let c=document.getElementById('content');if(state.view==='dashboard')c.innerHTML=renderDashboard();if(state.view==='person')c.innerHTML=renderPerson();if(state.view==='assessment')c.innerHTML=renderAssessment();if(state.view==='settings')c.innerHTML=renderSettings();syncLanguageSwitch();bindContent()}
+function pageTitle(title,sub,buttons=''){return `<div class="page-title"><div><h1>${esc(title)}</h1><p class="sub">${sub}</p></div><div class="actions no-print">${buttons}</div></div>`}
+function renderDashboard(){const completed=data.assessments.filter(a=>a.status==='final'),people=data.people,assessed=people.filter(p=>latest(p)),open=people.reduce((n,p)=>{const a=latest(p);return n+(a?getCoachingSignals(a).length:0)},0),thisQuarter=completed.filter(a=>quarter(a.date)===quarter());return `${pageTitle('Team overview','Quarterly assessments, individual development and consistency.',`<button class="btn black" data-action="add-person">+ Add barista</button>`)}<div class="grid metrics"><div class="metric"><span class="tiny">TEAM MEMBERS</span><strong>${people.length}</strong></div><div class="metric"><span class="tiny">ASSESSED</span><strong>${assessed.length}<span style="font-family:DM Sans;font-size:13px;color:#aaa"> / ${people.length}</span></strong></div><div class="metric"><span class="tiny">${quarter().toUpperCase()} COMPLETED</span><strong>${thisQuarter.length}</strong></div><div class="metric"><span class="tiny">COACHING SIGNALS</span><strong>${open}</strong></div></div><div class="panel" style="margin-top:15px"><div class="section-title"><h2>Team roster</h2><span class="light">Trend compares matching criteria from the last two completed assessments</span></div>${!people.length?`<div class="empty"><strong>Your team starts here.</strong>Add a barista, then create the first calibration assessment.<div style="margin-top:16px"><button class="btn black" data-action="add-person">Add your first barista</button></div></div>`:`<div class="person-row head"><span>Barista</span><span>Last score</span><span>Trend</span><span>Last assessed</span><span></span></div>${people.slice().map(p=>{let a=latest(p),b=previous(p);return `<div class="person-row draggable-roster" data-drag-person="${esc(p.id)}" data-open-row="${esc(p.id)}" tabindex="0" role="link" aria-label="Open ${esc(p.name)} profile"><div class="namecell"><span class="drag-handle" draggable="true" data-drag-handle="${esc(p.id)}" title="Drag to reorder" aria-label="Drag to reorder">⠿</span><span class="avatar">${esc(initials(p.name))}</span><div style="min-width:0"><button class="mini-link" data-open-person="${esc(p.id)}">${esc(p.name)}</button><div class="light">${esc(p.role||'Barista')}</div></div></div><div>${a?`<span class="score-ring">${pct(mean(a))}<small>/4</small></span>`:'<span class="muted">—</span>'}</div><div>${trendHTML(trend(a,b))}</div><span class="light">${a?fmt(a.date):'Not assessed'}</span><div><button class="btn small" data-new-assess="${esc(p.id)}">Assess</button></div></div>`}).join('')}`}</div>`}
+function renderPerson(){const p=person(state.personId);if(!p)return '<div class="empty">Barista not found.</div>';const aa=assessments(p),a=latest(p),b=previous(p),dt=trend(a,b),drafts=aa.filter(x=>x.status==='draft');let buttons=`<button class="btn" data-action="edit-person">Edit profile</button><button class="btn" data-new-assess="${esc(p.id)}">+ New assessment</button>${a?`<button class="btn black" data-view-assess="${esc(a.id)}">View latest assessment</button><button class="btn black" data-print-plan="${esc(a.id)}">Print staff report</button>`:''}`;return `${pageTitle(p.name,esc(p.role||'Barista')+' · '+(a?'Last completed '+fmt(a.date):'No completed assessments'),buttons)}${renderMemberMetrics(a,dt)}<div class="tabs no-print"><button class="tab ${state.tab==='overview'?'active':''}" data-tab="overview">Overview</button><button class="tab ${state.tab==='history'?'active':''}" data-tab="history">Assessment history <span class="light">${aa.length}</span></button></div><div class="member-tab-content">${state.tab==='history'?renderHistory(p,aa):renderProfileOverview(p,a,b,dt,drafts)}</div>`}
+function renderMemberMetrics(a,dt){if(!a)return '';return `<div class="grid metrics"><div class="metric"><span class="tiny">LATEST ASSESSMENT</span><strong>${pct(mean(a))}<span style="font:12px DM Sans;color:#999"> / 4</span></strong></div><div class="metric"><span class="tiny">QUARTER</span><strong style="font-size:22px">${esc(a.quarter||quarter(a.date))}</strong></div><div class="metric"><span class="tiny">OVERALL TREND</span><div style="margin-top:17px">${trendHTML(dt)}</div></div><div class="metric"><span class="tiny">CRITERIA OBSERVED</span><strong>${scored(a)}<span style="font:12px DM Sans;color:#999"> / ${assessmentItems(a).length}</span></strong></div></div>`;}
+function renderProfileOverview(p,a,b,dt,drafts){if(!a)return `<div class="panel"><div class="empty"><strong>No completed assessments for ${esc(p.name)}.</strong>Start a baseline assessment to identify strengths and coaching priorities.<div style="margin-top:17px"><button class="btn black" data-new-assess="${esc(p.id)}">Start first assessment</button></div></div>${drafts.map(d=>`<div class="stat-line"><span>Unfinished draft · ${fmt(d.date)}</span><button class="btn small" data-edit-assess="${esc(d.id)}">Continue</button></div>`).join('')}</div>`;const str=getStrong(a).slice(0,5),gaps=getGaps(a).slice(0,5);let movements=b?assessmentItems(a).filter(it=>[1,2,3,4].includes(Number(a.ratings[it.id]))&&[1,2,3,4].includes(Number(b.ratings[it.id]))).map(it=>({...it,diff:Number(a.ratings[it.id])-Number(b.ratings[it.id])})).filter(x=>x.diff!==0):[];return `<div class="grid two" style="margin-top:15px"><div class="panel"><div class="section-title"><h2>Competency snapshot</h2><span class="pill">Latest quarter</span></div>${assessmentDomains(a).map(d=>{let v=oneDomain(a,d);return `<div class="barline"><span>${esc(d.short)}</span><div class="progress"><span style="width:${v==null?0:v/4*100}%"></span></div><b style="text-align:right">${v==null?'—':v.toFixed(1)}</b></div>`}).join('')}<div class="divider"></div><div class="section-title" style="margin-bottom:7px"><h3>Since previous assessment</h3></div>${!b?'<p class="muted">This is the baseline. Trends appear after a second completed assessment.</p>':!movements.length?'<p class="muted">No individual criterion scores changed in the matched set.</p>':movements.map(it=>`<div class="stat-line"><span>${esc(it.name)}</span><span class="trend ${it.diff>0?'up':'down'}">${it.diff>0?'↑ +':'↓ '}${it.diff}</span></div>`).join('')}</div><div class="panel"><div class="section-title"><h2>Strengths</h2><span class="pill good">Score 4</span></div>${str.length?str.map(it=>`<div class="insight"><b>${esc(it.name)}</b><div class="light">${esc(it.domainShort)}${a.notes?.[it.id]?' · '+esc(a.notes[it.id]):''}</div></div>`).join(''):'<p class="muted">No criteria marked 4 yet. Use the assessment narrative to recognize observed strengths.</p>'}${a.strengthsNote?`<div class="notice" style="margin-top:15px">${esc(a.strengthsNote)}</div>`:''}<div class="divider"></div><div class="section-title"><h2>Areas to strengthen</h2><span class="pill amber">Scores 1–2</span></div>${gaps.length?gaps.map(it=>`<div class="insight"><b>${esc(it.name)} <span class="light">· ${a.ratings[it.id]}/4</span></b><div class="light">${esc(it.domainShort)}</div></div>`).join(''):'<p class="muted">No criteria scored 1–2 in this assessment.</p>'}</div></div><div class="panel" style="margin-top:15px"><div class="section-title"><h2>Latest assessment</h2><span class="pill">${fmt(a.date)}</span></div><div class="toolbar"><div class="muted">${esc(a.assessor||'Assessor not recorded')} · ${scored(a)} criteria observed · ${esc(a.status)}</div><div class="actions"><button class="btn small" data-view-assess="${esc(a.id)}">View / edit assessment</button></div></div>${drafts.length?drafts.map(d=>`<div class="stat-line"><span>Draft awaiting completion · ${fmt(d.date)}</span><button class="btn small" data-edit-assess="${esc(d.id)}">Continue draft</button></div>`).join(''):''}</div>`}
+function renderHistory(p,aa){return `<div class="panel"><div class="section-title"><h2>Assessment history</h2><span class="light">Completed records are retained unless deliberately deleted</span></div>${!aa.length?'<div class="empty">No assessment history.</div>':aa.map((a,i)=>{const older=aa.slice(i+1).find(x=>x.status==='final'),delta=a.status==='final'?trend(a,older):null;return `<div class="history-card"><div class="history-top"><div><b>${esc(a.quarter||quarter(a.date))}</b> <span class="pill ${a.status==='draft'?'amber':'good'}">${a.status==='draft'?'Draft':'Completed'}</span><div class="light">${fmt(a.date)} · ${esc(a.assessor||'No assessor')} · ${scored(a)}/${assessmentItems(a).length} observed</div></div><div style="text-align:right"><b style="font-size:18px">${pct(mean(a))}</b><div>${trendHTML(delta)}</div></div></div><div class="form-actions"><button class="btn small" data-${a.status==='draft'?'edit':'view'}-assess="${esc(a.id)}">${a.status==='draft'?'Continue draft':'View / edit'}</button><button class="btn small danger" data-delete-assess="${esc(a.id)}">Delete</button></div></div>`}).join('')}</div>`}
+function blankAssessment(pid){return {id:uid(),personId:pid,date:dateNow(),quarter:quarter(),assessor:'',status:'draft',leadershipTrack:isLeadershipRole(person(pid)),ratings:{},notes:{},strengthsNote:'',contextNote:'',summaryNote:'',plan:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()}}
+function startAssessment(pid){let p=person(pid);if(!p)return;let a=blankAssessment(pid);data.assessments.push(a);persist();state.personId=pid;openAssessment(a.id)}
+function openAssessment(id){const a=data.assessments.find(x=>x.id===id);if(!a)return;if(dirty&&!confirm('Discard unsaved changes to this assessment?'))return;draft=structuredClone(a);dirty=false;state={...state,view:'assessment',personId:a.personId,assessmentId:id};setRoute(state);escapeSide();render();window.scrollTo(0,0)}
+const ZH_CRITERIA={"recipes":["配方知识与一致性","配方"],"coffee":["咖啡技术","咖啡"],"workflow":["工作流程与效率","流程"],"clean":["清洁与整理","清洁"],"service":["顾客服务与判断","服务"],"team":["团队合作与责任心","团队"],"recipe_ingredients":["原料与配方知识","清楚掌握饮品所需原料、比例和制作方式。"],"recipe_measure":["配方用量与甜度标准","准确使用标准克数、容量及已批准的甜度调整，不凭感觉决定。"],"recipe_execution":["饮品制作与出品","遵循标准制作顺序、流程和外观要求。"],"recipe_mods":["客制化判断","了解允许的调整、何时询问主管及何时解释限制。"],"coffee_dial":["浓缩咖啡校准与调整","通过品尝和测量做出合理调整，并清楚交接参数。"],"coffee_extraction":["萃取一致性","确保布粉、压粉、萃取参数及出品品质稳定。"],"coffee_milk":["奶泡质地与温度","制作稳定细腻的奶泡，控制温度并正确处理牛奶。"],"coffee_finish":["拉花与出品检查","达到出品要求，并在交付前确认饮品品质。"],"flow_priority":["订单优先顺序","合理安排饮品顺序，兼顾品质与订单先后。"],"flow_pace":["高峰期工作节奏","繁忙时保持效率，同时维持品质。"],"flow_handoff":["沟通与交接","清晰交接需求、饮品进度、班次和工作站情况。"],"flow_awareness":["工作站观察与主动性","主动发现备料需求、瓶颈和可协助的事项。"],"clean_glass":["玻璃器皿与设备维护","确保器皿洁净干燥，正确使用和维护设备。"],"clean_station":["工作站清洁与卫生","服务过程中持续保持工作区域清洁且符合食品安全要求。"],"clean_stock":["补货与备料","主动检查库存、配料、咖啡豆、杯盖及开店备料。"],"clean_close":["换班交接与收尾标准","完成交接和收尾工作，不提前停止对客服务。"],"service_guest":["顾客沟通","与顾客清晰、尊重且得体地沟通。"],"service_recover":["服务问题处理","冷静处理做错的饮品、顾客不满与重做要求。"],"service_mod":["客制化需求说明","在顾客喜好与配方标准之间保持合理平衡。"],"service_ownership":["判断与上报","能独立处理常规问题，并及时将例外情况交由主管。"],"team_support":["团队协助与合作","主动支持同事，同时保持工作分工清晰。"],"team_feedback":["接受与落实反馈","愿意听取反馈、确认要求并在工作中改进。"],"team_follow":["任务跟进与责任感","可靠完成任务，离岗前主动说明未完成事项。"],"team_standards":["遵守共同标准","持续遵循既定操作规范，不随意改用个人习惯。"],"leadership":["人员管理与带班领导力","带班管理"],"lead_delegate":["任务分配与责任落实","明确分配任务、优先级、负责人及完成标准，并检查执行结果，而非事事亲力亲为。"],"lead_develop":["指导与培养团队成员","及时提供具体反馈，示范操作标准，帮助同事逐步独立完成工作。"],"lead_supervise":["现场监督与任务跟进","监督休息时间、打卡、配方执行、清洁及任务完成情况，并及时纠正问题。"],"lead_priorities":["明确并统一班次优先事项","在开店、高峰期及交接时说明工作顺序，让团队清楚当前最重要的任务。"],"lead_feedback":["沟通与责任落实","以尊重且明确的方式纠正不一致的操作，统一执行标准并持续跟进。"]};
+let assessmentLanguage=localStorage.getItem('yihui_calibration_language')==='zh'?'zh':'en';
+function syncLanguageSwitch(){
+ const el=document.getElementById('languageToggle');
+ if(!el)return;
+ const isChinese=assessmentLanguage==='zh';
+ el.style.display=state.view==='assessment'?'inline-grid':'none';
+ el.classList.toggle('zh',isChinese);
+ el.setAttribute('aria-pressed',String(isChinese));
+ el.setAttribute('title',isChinese?'中文 · Switch to English':'English · 切换为中文');
+ // Keep the visible selection in sync even after an in-place assessment render.
+ const options=el.querySelectorAll('span');
+ options.forEach((option,i)=>{
+   const active=i===(isChinese?1:0);
+   option.style.setProperty('background-color',active?'#171717':'transparent','important');
+   option.style.setProperty('color',active?'#ffffff':'#777777','important');
+ });
+}
+function setAssessmentLanguage(next){if(next===assessmentLanguage)return;assessmentLanguage=next;try{localStorage.setItem('yihui_calibration_language',next)}catch(e){}const y=window.scrollY;render();window.scrollTo(0,y)}
+function zhName(d){return assessmentLanguage==="zh"?(ZH_CRITERIA[d.id]?.[0]||d.title||d.name):(d.title||d.name)}
+function zhDesc(it){return assessmentLanguage==="zh"?(ZH_CRITERIA[it.id]?.[1]||it.desc):it.desc}
+function lang(en,zh){return assessmentLanguage==="zh"?zh:en}
+function renderAssessment(){
+ if(!draft){const a=data.assessments.find(a=>a.id===state.assessmentId);if(!a)return '';draft=structuredClone(a)}
+ const p=person(draft.personId),num=scored(draft),v=mean(draft),strong=getStrongDomains(draft),items=assessmentItems(draft),domainsToShow=assessmentDomains(draft);
+ const header=pageTitle(lang('Assessment','员工评估'),`${esc(p?.name||'Unknown')} · ${esc(draft.quarter)} · ${draft.status==='final'?lang('Completed record','已完成'):lang('Draft in progress','草稿')}`,`<button class="btn" data-action="back-person">← ${lang('Profile','员工档案')}</button><button class="btn" data-action="print-assess">${lang('Print staff report','打印员工报告（英文）')}</button>`);
+ const parsedQuarter=/^Q([1-4]) (\d{4})$/.exec(draft.quarter||'')||/^Q([1-4]) (\d{4})$/.exec(quarter(draft.date));
+ const selectedQuarter=parsedQuarter?.[1]||'1',selectedYear=Number(parsedQuarter?.[2]||new Date().getFullYear());
+ const firstYear=Math.min(2015,selectedYear),lastYear=Math.max(new Date().getFullYear()+8,selectedYear);
+ const quarterOptions=[1,2,3,4].map(n=>`<option value="${n}" ${String(n)===selectedQuarter?'selected':''}>Q${n}</option>`).join('');
+ const yearOptions=Array.from({length:lastYear-firstYear+1},(_,i)=>lastYear-i).map(n=>`<option value="${n}" ${n===selectedYear?'selected':''}>${n}</option>`).join('');
+ const dateFields=`<div class="panel" style="margin-bottom:14px"><div class="columns"><div class="field"><label for="aDate">${lang('Assessment date','评估日期')}</label><input type="date" id="aDate" value="${esc(draft.date)}"></div><div class="columns" style="gap:9px"><div class="field"><label for="aQuarter">${lang('Quarter','季度')}</label><select id="aQuarter">${quarterOptions}</select></div><div class="field"><label for="aYear">${lang('Year','年份')}</label><select id="aYear">${yearOptions}</select></div></div></div><div class="field" style="margin-top:13px"><label for="aAssessor">${lang('Assessed by','评估人')}</label><input id="aAssessor" value="${esc(draft.assessor)}" placeholder="${lang('Lead or manager name','主管或经理姓名')}"></div></div>`;
+ const domains=domainsToShow.map(d=>`<div class="domain"><div class="domain-head"><div><h3>${esc(zhName(d))}</h3><span class="light">${d.items.filter(i=>[1,2,3,4].includes(Number(draft.ratings?.[i.id]))).length} / ${d.items.length} ${lang('scored','已评分')}</span></div><span class="pill">${pct(oneDomain(draft,d))} / 4</span></div>${d.items.map(it=>{
+ const rate=Number(draft.ratings?.[it.id]),required=[1,2].includes(rate),noNote=!String(draft.notes?.[it.id]||'').trim();
+ return `<div class="criterion" data-criterion="${it.id}"><div class="criterion-top"><div><div class="criterion-name">${esc(zhName(it))}</div><div class="criterion-desc">${esc(zhDesc(it))}</div></div></div><div class="ratings">${[1,2,3,4,'NO'].map(n=>`<button class="rating ${n==='NO'?'na':''} ${String(draft.ratings?.[it.id]??'')===String(n)?'selected':''}" data-rate="${it.id}" data-value="${n}" title="${n==='NO'?lang('Not observed','未观察'):['',lang('Needs coaching','需要辅导'),lang('Developing / inconsistent','仍在提升 / 不稳定'),lang('Meets standard','达到标准'),lang('Consistently strong','持续优秀')][n]}">${n==='NO'?lang('No Observation','未观察'):n+' · '+['',lang('Needs coaching','需要辅导'),lang('Developing','仍在提升'),lang('Meets','达标'),lang('Strong','优秀')][n]}</button>`).join('')}</div><details class="criterion-note ${required&&noNote?'needs-observation':''}" ${required||draft.notes?.[it.id]?'open':''}><summary>${required?lang('Required observation','必填观察记录'):(draft.notes?.[it.id]?lang('Edit observation','编辑观察记录'):lang('+ Add observation','＋添加观察记录'))}${required?' *':''}</summary><textarea rows="2" data-note="${it.id}" aria-required="${required}" placeholder="${lang('Describe a specific behavior or example observed during service.','请记录具体观察到的行为或工作中的实例。')}">${esc(draft.notes?.[it.id]||'')}</textarea>${required&&noNote?`<p class="required-tip">${lang('A written observation is required for a rating of 1 or 2.','评分为 1 或 2 时，必须填写具体观察记录。')}</p>`:''}</details></div>`;
+ }).join('')}</div>`).join('');
+ const buttons=`<div class="form-actions no-print"><button class="btn" data-action="save-draft">${lang('Save draft','保存草稿')}</button><button class="btn black" data-action="finalize">${draft.status==='final'?lang('Save completed assessment','保存已完成评估'):lang('Complete assessment','完成评估')}</button><button class="btn ghost" data-action="back-person">${lang('Cancel','取消')}</button></div>`;
+ const sidebar=`<div class="small-stack sticky"><div class="panel"><div class="section-title"><h2>${lang('Live snapshot','实时概况')}</h2><span class="pill">${num} / ${items.length}</span></div><div class="metric" style="padding:9px;border:0"><span class="tiny">${lang('Observed score','已观察项目平均分')}</span><strong>${pct(v)}<span style="font:13px DM Sans;color:#aaa"> / 4</span></strong></div><div class="progress" style="margin-bottom:16px"><span style="width:${num/items.length*100}%"></span></div><div class="small-stack">${domainsToShow.map(d=>`<div class="stat-line"><span>${esc(assessmentLanguage==='zh'?ZH_CRITERIA[d.id]?.[1]||d.short:d.short)}</span><b>${pct(oneDomain(draft,d))}</b></div>`).join('')}</div></div><div class="panel"><div class="section-title"><h2>${lang('Strength signals','优势信号')}</h2><span class="pill good">${lang('By category','按类别')}</span></div>${strong.length?strong.map(d=>`<div class="insight"><b>${esc(zhName(d))}</b></div>`).join(''):`<p class="light">${lang('Categories that are consistently strong will appear here.','达到持续优秀标准的类别将在此显示。')}</p>`}</div><div class="panel"><div class="section-title"><h2>${lang('Coaching signals','辅导重点')}</h2><span class="pill amber">${lang('Ratings & notes','评分与记录')}</span></div><div id="coachingSignals">${coachingSignalHTML(draft)}</div></div></div>`;
+ return `${header}<div class="assess-grid"><div>${dateFields}${domains}${buttons}</div>${sidebar}</div>`;
+}
+function renderSettings(){return `${pageTitle('Data & backup','Manage secure cloud records and JSON backups.')}<div class="grid two"><div class="panel"><div class="section-title"><h2>Backup & restore</h2></div><p>Team records are stored in Firebase and shared with authorized management accounts. Export JSON periodically as an additional backup.</p><div class="form-actions"><button class="btn black" data-action="export">Download JSON backup</button><button class="btn" data-action="import">Import JSON backup</button></div><p class="light">Import replaces the shared Firebase dataset for all managers after confirmation. Export first if you want to keep a copy of the current state.</p></div><div class="panel"><div class="section-title"><h2>Records</h2></div><div class="stat-line"><span>Baristas</span><b>${data.people.length}</b></div><div class="stat-line"><span>Assessments</span><b>${data.assessments.length}</b></div><div class="stat-line"><span>Last saved</span><b>${data.updatedAt?new Date(data.updatedAt).toLocaleString():'Not yet'}</b></div><div class="form-actions"><button class="btn danger" data-action="clear-all">Delete all cloud data</button></div></div></div><div class="panel" style="margin-top:15px"><div class="section-title"><h2>About the records</h2></div><p class="muted">Each barista has a stable profile. Assessments are stored separately with their own date, quarter, scores, notes, and improvement actions. Trend calculations compare only criteria actually scored in both completed assessments; No Observation answers are excluded. Completed assessments can be edited and retained for quarterly comparison.</p><p class="muted">This hosted version requires Firebase sign-in and an approved manager account. Signed-in managers share the same records. Avoid editing the same assessment simultaneously on multiple devices.</p></div>`}
+function bindContent(){document.querySelectorAll('[data-action]').forEach(el=>el.onclick=()=>action(el.dataset.action));document.querySelectorAll('[data-open-person]').forEach(el=>el.onclick=()=>navigate('person',el.dataset.openPerson));document.querySelectorAll('[data-new-assess]').forEach(el=>el.onclick=()=>startAssessment(el.dataset.newAssess));document.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>navigate('person',state.personId,null,el.dataset.tab));document.querySelectorAll('[data-view-assess],[data-edit-assess]').forEach(el=>el.onclick=()=>openAssessment(el.dataset.viewAssess||el.dataset.editAssess));document.querySelectorAll('[data-delete-assess]').forEach(el=>el.onclick=()=>deleteAssessment(el.dataset.deleteAssess));document.querySelectorAll('[data-print-plan]').forEach(el=>el.onclick=()=>{const a=data.assessments.find(x=>x.id===el.dataset.printPlan);if(a)printStaffReport(a)});if(state.view==='assessment')bindAssessment();bindBaristaDrag()}
+let draggedPersonId=null;
+function moveBarista(sourceId,targetId){if(!sourceId||!targetId||sourceId===targetId)return;const from=data.people.findIndex(p=>p.id===sourceId),to=data.people.findIndex(p=>p.id===targetId);if(from<0||to<0)return;const [moved]=data.people.splice(from,1);data.people.splice(to,0,moved);persist();render();toast('Barista order saved')}
+function bindBaristaDrag(){
+  // Only the handle initiates a drag; card clicks continue to open a profile.
+  document.querySelectorAll('[data-drag-handle]').forEach(handle=>{
+    handle.addEventListener('click',e=>{e.stopPropagation();e.preventDefault()});
+    handle.addEventListener('dragstart',e=>{
+      draggedPersonId=handle.dataset.dragHandle;
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain',draggedPersonId);
+      handle.closest('[data-drag-person]')?.classList.add('dragging');
+      e.stopPropagation();
+    });
+    handle.addEventListener('dragend',()=>{
+      draggedPersonId=null;
+      document.querySelectorAll('.dragging,.drag-over').forEach(node=>node.classList.remove('dragging','drag-over'));
+    });
+  });
+  document.querySelectorAll('[data-drag-person]').forEach(card=>{
+    card.addEventListener('dragover',e=>{
+      if(!draggedPersonId||draggedPersonId===card.dataset.dragPerson)return;
+      e.preventDefault();e.dataTransfer.dropEffect='move';card.classList.add('drag-over');
+    });
+    card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
+    card.addEventListener('drop',e=>{
+      e.preventDefault();e.stopPropagation();
+      const from=draggedPersonId||e.dataTransfer.getData('text/plain');
+      draggedPersonId=null;
+      moveBarista(from,card.dataset.dragPerson);
+    });
+  });
+  document.querySelectorAll('[data-open-row]').forEach(card=>{
+    card.addEventListener('click',e=>{
+      if(e.target.closest('[data-drag-handle],button,a,input,select,textarea'))return;
+      navigate('person',card.dataset.openRow);
+    });
+    card.addEventListener('keydown',e=>{
+      if((e.key==='Enter'||e.key===' ')&&e.target===card){e.preventDefault();navigate('person',card.dataset.openRow)}
+    });
+  });
+}
+function bindAssessment(){document.querySelectorAll('[data-rate]').forEach(el=>el.onclick=()=>{draft.ratings[el.dataset.rate]=el.dataset.value;dirty=true;render()});document.querySelectorAll('[data-note]').forEach(el=>el.oninput=()=>{draft.notes[el.dataset.note]=el.value;dirty=true;const signals=document.getElementById('coachingSignals');if(signals)signals.innerHTML=coachingSignalHTML(draft)});[['aDate','date'],['aAssessor','assessor']].forEach(([id,field])=>{let e=document.getElementById(id);if(e)e.oninput=()=>{draft[field]=e.value;dirty=true}});const setCycle=()=>{draft.quarter='Q'+document.getElementById('aQuarter').value+' '+document.getElementById('aYear').value;dirty=true};document.getElementById('aQuarter')?.addEventListener('change',setCycle);document.getElementById('aYear')?.addEventListener('change',setCycle)}
+function reportText(s,limit=360){const raw=String(s||'').trim().replace(/\s+/g,' ');return esc(raw.length>limit?raw.slice(0,limit-1).trimEnd()+'…':raw)}
+function printStaffReport(a){
+ if(!a)return;
+ // Predefined report text stays English. Free-text manager observations cannot be automatically translated offline.
+ const untranslated=getCoachingSignals(a).filter(it=>/[\u3400-\u9fff]/.test(String(a.notes?.[it.id]||'')));
+ if(untranslated.length){alert(`The staff report is English-only. ${untranslated.length} observation(s) contain Chinese text. Please provide an English wording for those observations before printing. / 员工报告仅使用英文。请先将 ${untranslated.length} 条中文观察记录改为英文，再打印。`);return;}
+ const p=person(a.personId),root=document.getElementById('staffPrintRoot');
+ if(!p||!root)return;
+ // Match the assessment's Strength Signals: display qualifying category names only.
+ const strengths=getStrongDomains(a);
+ const strengthsSection=strengths.length
+  ?`<div class="staff-review-grid">${strengths.map(d=>`<div class="staff-review-item"><h3>${esc(d.title)}</h3></div>`).join('')}</div>`
+  :'<p class="staff-story">No strength categories identified in this assessment.</p>';
+ // Source priorities from the exact same rating + observation logic as Coaching Signals.
+ // Print priorities directly from coaching signals and observations.
+ const signals=getCoachingSignals(a);
+ const focus=signals.length?signals.map(it=>{
+   const note=String(a.notes?.[it.id]||'').trim();
+   const low=[1,2].includes(Number(a.ratings?.[it.id]));
+   // Keep the recorded observation intact (rather than silently falling back to
+   // an outdated separate plan); for an unannotated low rating, suggest
+   // a concrete, standards-focused coaching action.
+   const description=note
+     ?`<p><b>Focus:</b> ${esc(note).replace(/\n/g,'<br>')}</p>`
+     :`<p><b>Action:</b> ${esc(it.action||'Review the standard with a lead and demonstrate consistent execution during service.')}</p>`;
+   return `<div class="staff-review-item"><h3>${esc(it.name)}</h3>${description}</div>`;
+ }).join(''):'<p class="staff-story">No specific priorities identified in this assessment.</p>';
+ const prev=data.assessments.filter(x=>x.personId===a.personId&&x.id!==a.id&&x.status==='final'&&((x.date||'')<(a.date||'')||((x.date||'')===(a.date||'')&&(x.updatedAt||'')<(a.updatedAt||'')))).sort(sortDate)[0];
+ const improved=prev?allItems.filter(it=>[1,2,3,4].includes(Number(a.ratings?.[it.id]))&&[1,2,3,4].includes(Number(prev.ratings?.[it.id]))&&Number(a.ratings[it.id])>Number(prev.ratings[it.id])):[];
+ const growth=improved.length?`<section class="staff-section"><div class="staff-section-head"><b>Changes since last review</b></div><p class="staff-story">Improvement noted in: ${improved.map(x=>esc(x.name)).join('; ')}.</p></section>`:'';
+ root.innerHTML=`<article class="staff-sheet ${strengths.length+signals.length>9?'staff-dense':''}"><header class="staff-head"><div class="staff-brand">YIHUI</div><div class="staff-type">Team calibration<br>Quarterly review</div></header><div class="staff-person"><div><p class="staff-kicker">Staff review</p><h1>${esc(p.name)}</h1></div><div class="staff-meta">${esc(a.quarter||quarter(a.date))}<br>${esc(fmt(a.date))}</div></div><section class="staff-section"><div class="staff-section-head"><b>Priorities for next quarter</b></div><div class="staff-review-grid">${focus}</div></section>${growth}<section class="staff-section"><div class="staff-section-head"><b>Strengths observed</b></div>${strengthsSection}</section></article>`;
+ window.print();
+}
+function action(act){if(act==='add-person')return editPersonModal();if(act==='edit-person')return editPersonModal(person(state.personId));if(act==='back-person')return navigate('person',state.personId);if(act==='save-draft')return saveAssessment(false);if(act==='finalize')return saveAssessment(true);if(act==='print-assess')return printStaffReport(draft);if(act==='export')return exportJSON();if(act==='import')return importJSON();if(act==='clear-all')return clearAll()}
+function saveAssessment(final){if(final){if(!draft.date)return alert('Set an assessment date.');if(!draft.assessor.trim())return alert('Enter the assessor name.');if(scored(draft)<12&&!confirm(`Only ${scored(draft)} of ${assessmentItems(draft).length} criteria are scored. Complete this assessment anyway?`))return;let missingEvidence=getGaps(draft).filter(it=>!draft.notes[it.id]?.trim());if(missingEvidence.length){const first=missingEvidence[0];alert(assessmentLanguage==='zh'?`有 ${missingEvidence.length} 项评分为 1 或 2，但缺少观察记录。完成评估前必须填写。`:`${missingEvidence.length} criteria rated 1 or 2 are missing observations. Add a written observation for each before completing the assessment.`);const target=document.querySelector(`[data-criterion=\"${first.id}\"]`);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});const detail=target.querySelector('details');if(detail)detail.open=true;target.querySelector('textarea')?.focus({preventScroll:true})}return;}draft.status='final'}else draft.status='draft';draft.quarter=draft.quarter.trim()||quarter(draft.date);draft.updatedAt=new Date().toISOString();let idx=data.assessments.findIndex(a=>a.id===draft.id);if(idx<0)return;data.assessments[idx]=structuredClone(draft);if(!persist())return;dirty=false;toast(final?'Assessment saved':'Draft saved');navigate('person',draft.personId,null,final?'overview':'history')}
+function editPersonModal(p){const editing=!!p;let m=document.getElementById('modalRoot');m.innerHTML=`<div class="modal-bg"><div class="modal"><h2>${editing?'Edit barista':'Add barista'}</h2><p class="muted">A single profile is used across all quarterly assessments.</p><form id="personForm"><div class="field"><label>Name</label><input name="name" required maxlength="80" value="${esc(p?.name||'')}" placeholder="Barista name"></div><div class="field" style="margin-top:13px"><label>Role</label><select name="role"><option ${(!p||p.role==='Barista')?'selected':''}>Barista</option><option ${p?.role==='Shift Lead'?'selected':''}>Shift Lead</option><option ${p?.role==='Manager'?'selected':''}>Manager</option><option ${p?.role==='Other'?'selected':''}>Other</option></select></div><div class="field" style="margin-top:13px"><label>Notes (management only)</label><textarea name="notes" placeholder="Optional; avoid sensitive personal information">${esc(p?.notes||'')}</textarea></div><div class="form-actions"><button class="btn black" type="submit">${editing?'Save profile':'Add barista'}</button><button class="btn" type="button" id="cancelModal">Cancel</button>${editing?'<button class="btn danger" type="button" id="deletePerson">Delete profile</button>':''}</div></form></div></div>`;document.getElementById('cancelModal').onclick=()=>m.innerHTML='';document.getElementById('personForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),name=f.get('name').trim();if(!name)return;if(editing){p.name=name;p.role=f.get('role');p.notes=f.get('notes')}else{p={id:uid(),name,role:f.get('role'),notes:f.get('notes'),createdAt:new Date().toISOString()};data.people.push(p)}persist();m.innerHTML='';navigate('person',p.id);toast('Profile saved')};if(editing)document.getElementById('deletePerson').onclick=()=>{let n=data.assessments.filter(a=>a.personId===p.id).length;if(!confirm(`Delete ${p.name} and all ${n} associated assessments? This cannot be undone unless you have a JSON backup.`))return;data.people=data.people.filter(x=>x.id!==p.id);data.assessments=data.assessments.filter(a=>a.personId!==p.id);persist();m.innerHTML='';navigate('dashboard')}}
+function deleteAssessment(id){let a=data.assessments.find(a=>a.id===id);if(!a)return;if(!confirm('Permanently delete this assessment? Export a backup first if needed.'))return;data.assessments=data.assessments.filter(x=>x.id!==id);persist();render();toast('Assessment removed')}
+function exportJSON(){let content=JSON.stringify(data,null,2),blob=new Blob([content],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='YIHUI_Calibration_Backup_'+dateNow()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);toast('JSON backup downloaded')}
+function importJSON(){let inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';inp.onchange=async()=>{let file=inp.files?.[0];if(!file)return;try{let obj=JSON.parse(await file.text());if(!obj||!Array.isArray(obj.people)||!Array.isArray(obj.assessments)||obj.people.some(p=>!p.id||typeof p.name!=='string')||obj.assessments.some(a=>!a.id||!a.personId||typeof a.ratings!=='object'))throw Error('Invalid calibration backup structure');if(!confirm(`Replace shared Firebase data with ${obj.people.length} barista profiles and ${obj.assessments.length} assessments from ${file.name}?`))return;data={version:1,people:obj.people,assessments:obj.assessments,updatedAt:new Date().toISOString()};if(!persist())return;navigate('dashboard');toast('Backup imported')}catch(e){alert('Could not import: '+e.message)}};inp.click()}
+function clearAll(){if(!confirm('Delete all barista profiles and assessments from the shared cloud database? Export a backup first.'))return;if(!confirm('Confirm permanent deletion of all shared calibration records.'))return;data={version:1,people:[],assessments:[],updatedAt:null};persist();navigate('dashboard');toast('Shared records deleted')}
+document.getElementById('dashboardLink').onclick=()=>navigate('dashboard');document.getElementById('settingsLink').onclick=()=>navigate('settings');document.getElementById('addPersonSide').onclick=()=>editPersonModal();document.getElementById('exportTop').onclick=exportJSON;document.getElementById('languageToggle').onclick=()=>setAssessmentLanguage(assessmentLanguage==='en'?'zh':'en');syncLanguageSwitch();document.getElementById('menuButton').onclick=()=>document.getElementById('sidebar').classList.add('open');window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});window.addEventListener('popstate',restoreBrowserRoute);window.__calibrationCloudBoot=function(remote){
+  if(!remote||!Array.isArray(remote.people)||!Array.isArray(remote.assessments))remote={version:1,people:[],assessments:[],updatedAt:null};
+  data=remote;draft=null;dirty=false;
+  try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
+  state={...state,...routeFromHash()};
+  if(state.personId&&!person(state.personId))state={view:'dashboard',personId:null,assessmentId:null,tab:'overview',filter:'all'};
+  if(state.assessmentId&&!data.assessments.some(a=>a.id===state.assessmentId))state={...state,view:'person',assessmentId:null};
+  if(state.view==='assessment'){const a=data.assessments.find(x=>x.id===state.assessmentId);if(a){draft=structuredClone(a)}else state={...state,view:'dashboard'}}
+  setRoute(state,true);render();
+  document.getElementById('saveState').textContent='Synced with Firebase';
+};
+window.__calibrationCloudRemote=function(remote){
+  if(dirty||state.view==='assessment'){document.getElementById('saveState').textContent='Cloud updated · reopen to refresh';return;}
+  data=remote;try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){};
+  render();document.getElementById('saveState').textContent='Synced with Firebase';
+};
+</script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+const firebaseConfig = {
+  apiKey: "AIzaSyA_-LUjqlIazmypF1TMZqqrBB5TjLmdRbI",
+  authDomain: "q-team-cali.firebaseapp.com",
+  projectId: "q-team-cali",
+  storageBucket: "q-team-cali.firebasestorage.app",
+  messagingSenderId: "108233028547",
+  appId: "1:108233028547:web:af7f876196fc56eae54376"
+};
+const $=id=>document.getElementById(id);
+const msg=$('cloudMessage');
+const form=$('cloudLoginForm');
+const submit=$('cloudLoginButton');
+let auth, db, unsub=null, ready=false, saving=Promise.resolve(), pending=0, version=0, lastRemote='';
+const datasetRef=()=>doc(db,'calibration','team');
+function validate(v){return v&&Array.isArray(v.people)&&Array.isArray(v.assessments)}
+function setStatus(v){$('saveState').textContent=v}
+function appLock(){document.body.classList.add('cloud-locked');$('cloudAuth').style.display='grid';ready=false;$('cloudUser').innerHTML=''}
+$('cloudSignOut').onclick=()=>signOut(auth); 
+function appOpen(user,initial){document.body.classList.remove('cloud-locked');$('cloudAuth').style.display='none';$('cloudUser').innerHTML='';const email=document.createElement('span');email.textContent=user.email||'Manager';const btn=document.createElement('button');btn.type='button';btn.textContent='Sign out';btn.onclick=()=>{if(pending&&!confirm('A save may still be syncing. Sign out anyway?'))return;signOut(auth)};$('cloudUser').append(email,btn);window.__calibrationCloudBoot(initial);ready=true}
+function errorText(e){const code=e?.code||'';if(code.includes('invalid-credential')||code.includes('wrong-password'))return 'Incorrect email or password.';if(code==='auth/unauthorized-domain')return 'Add your GitHub Pages hostname to Firebase Authentication → Authorized domains.';return e?.message||String(e)}
+try{
+ const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
+ form.addEventListener('submit',async event=>{
+  event.preventDefault();submit.disabled=true;msg.textContent='Signing in…';
+  try{await signInWithEmailAndPassword(auth,$('cloudEmail').value.trim(),$('cloudPassword').value)}catch(e){msg.textContent=errorText(e)}finally{submit.disabled=false}
+ });
+ window.__calibrationCloudSave=snapshot=>{
+  if(!ready){setStatus('Cloud unavailable — export backup');throw new Error('Please sign in before making changes.')}
+  version++;pending++;setStatus('Syncing to Firebase…');
+  const current=version;
+  saving=saving.catch(()=>{}).then(async()=>{
+    await setDoc(datasetRef(),{payload:snapshot,updatedAt:serverTimestamp()});
+    lastRemote=JSON.stringify(snapshot);
+  }).then(()=>{pending--;if(!pending&&current===version)setStatus('Synced with Firebase')},err=>{
+    pending--;setStatus('Sync failed — export backup');
+    console.error('Firebase save failed',err);
+    alert('Firebase save failed. Your latest changes are still in this browser. Export JSON as a backup, check your connection and try saving again.\n'+errorText(err));
+  });
+ };
+ onAuthStateChanged(auth,async user=>{
+   if(unsub){unsub();unsub=null}appLock();
+   if(!user){$('cloudSignOut').style.display='none';msg.textContent='Sign in to continue.';return}
+   $('cloudSignOut').style.display='inline-block';
+   msg.textContent='Checking manager access…';
+   try{
+     const membership=await getDoc(doc(db,'authorizedManagers',user.uid));
+     if(!membership.exists()||membership.data()?.active!==true){
+       msg.textContent='This account is not authorized. Ask the Firebase project owner to create Firestore document authorizedManagers / '+user.uid+' with field active = true.\nUID: '+user.uid;
+       return;
+     }
+     msg.textContent='Loading team records…';
+     const remote=await getDoc(datasetRef());
+     const payload=remote.exists()?remote.data().payload:null;
+     const initial=validate(payload)?payload:{version:1,people:[],assessments:[],updatedAt:null};
+     lastRemote=JSON.stringify(initial);
+     appOpen(user,initial);
+     unsub=onSnapshot(datasetRef(),snap=>{
+       if(!ready||!snap.exists()||snap.metadata.hasPendingWrites)return;
+       const next=snap.data().payload;if(!validate(next))return;
+       const serialized=JSON.stringify(next);
+       if(serialized===lastRemote)return;
+       if(pending>0){setStatus('Another update received — refresh after syncing');return}
+       lastRemote=serialized;
+       window.__calibrationCloudRemote(next);
+     },err=>{setStatus('Live sync interrupted');console.error(err)});
+   }catch(e){msg.textContent='Could not load records. Check Firebase permissions and network.\n'+errorText(e)}
+ });
+}catch(e){msg.textContent='Firebase failed to initialize.\n'+errorText(e);console.error(e)}
+</script>
+</body></html>
