@@ -17,9 +17,26 @@
 @media print{
   html,body{width:210mm!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important;background:white!important}
   body>.app,body>#modalRoot,body>#toastRoot,body>#cloudAuth{display:none!important}
-  #staffPrintRoot{display:block!important;position:absolute;left:0;top:0;width:210mm;margin:0!important;padding:0!important;break-after:avoid;page-break-after:avoid}
-  .staff-sheet{width:210mm;height:295mm;max-height:295mm;break-after:avoid;page-break-after:avoid;padding:16mm 17mm 14mm;background:#fff;color:#151515;font-family:Arial,Helvetica,sans-serif;font-size:10pt;line-height:1.43;overflow:hidden;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  #staffPrintRoot{display:block!important;position:static!important;width:210mm;margin:0!important;padding:0!important;break-after:avoid;page-break-after:avoid}
+  .staff-sheet{width:210mm;height:294mm;max-height:294mm;break-after:avoid;page-break-after:avoid;padding:16mm 17mm 14mm;background:#fff;color:#151515;font-family:Arial,Helvetica,sans-serif;font-size:10pt;line-height:1.43;overflow:hidden;print-color-adjust:exact;-webkit-print-color-adjust:exact}
   .staff-sheet *{box-sizing:border-box}
+  #staffPrintRoot>.staff-sheet{display:block;break-inside:avoid;page-break-inside:avoid}
+  #staffPrintRoot>.staff-sheet:not(:last-child){break-after:page!important;page-break-after:always!important}
+  #staffPrintRoot>.staff-sheet:last-child{break-after:auto!important;page-break-after:auto!important}
+  .staff-cover{display:flex!important;flex-direction:column;justify-content:space-between}
+  .staff-cover-kicker{font-size:9pt;text-transform:uppercase;letter-spacing:.16em;color:#777}
+  .staff-cover-center{padding:28mm 0 23mm;border-top:1px solid #cfcfcb;border-bottom:1px solid #cfcfcb}
+  .staff-cover-title{font-family:Georgia,serif;font-size:36pt;font-weight:400;line-height:1.13;margin:0 0 13mm;letter-spacing:-.03em}
+  .staff-cover-person{font-family:Georgia,serif;font-size:23pt;margin:0 0 4mm;overflow-wrap:anywhere}
+  .staff-cover-meta{font-size:11pt;color:#555;line-height:1.8}
+  .staff-cover-private{border-top:1px solid #dededa;padding-top:6mm;font-size:9pt;color:#666}
+  .staff-standards-intro{font-size:9.5pt;color:#555;margin:3mm 0 7mm;max-width:170mm}
+  .staff-standards-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4mm;align-items:stretch}
+  .staff-standard-card{border:1px solid #dededb;padding:4.5mm;break-inside:avoid;min-width:0}
+  .staff-standard-card h3{font:400 13pt/1.25 Georgia,serif;margin:0 0 3mm}
+  .staff-standard-card ul{list-style:none;padding:0;margin:0}
+  .staff-standard-card li{font-size:8.9pt;line-height:1.34;padding:1.5mm 0;border-top:1px solid #eee;overflow-wrap:anywhere}
+  .staff-standard-note{font-size:8.5pt;color:#777;margin-top:7mm;border-top:1px solid #ddd;padding-top:4mm}
   .staff-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1.3pt solid #161616;padding-bottom:7mm;gap:8mm}
   .staff-brand{font-family:Georgia,serif;letter-spacing:.14em;font-size:24pt;line-height:1}
   .staff-type{text-transform:uppercase;font-size:8pt;letter-spacing:.13em;color:#555;text-align:right;line-height:1.6}
@@ -507,7 +524,13 @@ function printStaffReport(a){
  const prev=data.assessments.filter(x=>x.personId===a.personId&&x.id!==a.id&&x.status==='final'&&((x.date||'')<(a.date||'')||((x.date||'')===(a.date||'')&&(x.updatedAt||'')<(a.updatedAt||'')))).sort(sortDate)[0];
  const improved=prev?allItems.filter(it=>[1,2,3,4].includes(Number(a.ratings?.[it.id]))&&[1,2,3,4].includes(Number(prev.ratings?.[it.id]))&&Number(a.ratings[it.id])>Number(prev.ratings[it.id])):[];
  const growth=improved.length?`<section class="staff-section"><div class="staff-section-head"><b>Changes since last review</b></div><p class="staff-story">Improvement noted in: ${improved.map(x=>esc(x.name)).join('; ')}.</p></section>`:'';
- root.innerHTML=`<article class="staff-sheet ${strengths.length+signals.length>9?'staff-dense':''}"><header class="staff-head"><div class="staff-brand">YIHUI</div><div class="staff-type">Team calibration<br>Quarterly review</div></header><div class="staff-person"><div><p class="staff-kicker">Staff review</p><h1>${esc(p.name)}</h1></div><div class="staff-meta">${esc(a.quarter||quarter(a.date))}<br>${esc(fmt(a.date))}</div></div><section class="staff-section"><div class="staff-section-head"><b>Priorities for next quarter</b></div><div class="staff-review-grid">${focus}</div></section>${growth}<section class="staff-section"><div class="staff-section-head"><b>Strengths observed</b></div>${strengthsSection}</section></article>`;
+ const cycle=esc(a.quarter||quarter(a.date));
+ const date=esc(fmt(a.date));
+ const standards=assessmentDomains(a).map(d=>`<section class="staff-standard-card"><h3>${esc(d.title)}</h3><ul>${d.items.map(it=>`<li>${esc(it.name)}</li>`).join('')}</ul></section>`).join('');
+ const cover=`<article class="staff-sheet staff-cover"><div><div class="staff-brand">YIHUI</div><p class="staff-cover-kicker">Team calibration · Staff development</p></div><div class="staff-cover-center"><p class="staff-cover-kicker">Individual quarterly review</p><h1 class="staff-cover-title">Performance &amp;<br>Development</h1><p class="staff-cover-person">${esc(p.name)}</p><div class="staff-cover-meta">${cycle}<br>Review date: ${date}</div></div><div class="staff-cover-private"><b>Private · For the named employee and management</b><p>This package outlines the standards we share and the individualized feedback for this review period. Please keep it with your personal records and share it at your discretion.</p></div></article>`;
+ const standardsPage=`<article class="staff-sheet staff-standards"><header class="staff-head"><div class="staff-brand">YIHUI</div><div class="staff-type">Staff review<br>02 / 03</div></header><div class="staff-person"><div><p class="staff-kicker">Shared expectations</p><h1>Our Standards</h1></div><div class="staff-meta">${esc(p.name)}<br>${cycle}</div></div><p class="staff-standards-intro">These are the competencies we expect to see in everyday service. They describe what we value and what we work to develop together. Numerical evaluations are internal and are not included here.</p><div class="staff-standards-grid">${standards}</div><p class="staff-standard-note">The same core standards apply to everyone. Shift leadership responsibilities are included when relevant to the role. Use this page as a reference for feedback, coaching and continued growth.</p></article>`;
+ const review=`<article class="staff-sheet ${strengths.length+signals.length>9?'staff-dense':''}"><header class="staff-head"><div class="staff-brand">YIHUI</div><div class="staff-type">Individual review<br>03 / 03</div></header><div class="staff-person"><div><p class="staff-kicker">Staff review · Private</p><h1>${esc(p.name)}</h1></div><div class="staff-meta">${cycle}<br>${date}</div></div><section class="staff-section"><div class="staff-section-head"><b>Priorities for next quarter</b></div><div class="staff-review-grid">${focus}</div></section>${growth}<section class="staff-section"><div class="staff-section-head"><b>Strengths observed</b></div>${strengthsSection}</section></article>`;
+ root.innerHTML=cover+standardsPage+review;
  window.print();
 }
 function action(act){if(act==='add-person')return editPersonModal();if(act==='edit-person')return editPersonModal(person(state.personId));if(act==='back-person')return navigate('person',state.personId);if(act==='save-draft')return saveAssessment(false);if(act==='finalize')return saveAssessment(true);if(act==='print-assess')return printStaffReport(draft);if(act==='export')return exportJSON();if(act==='import')return importJSON();if(act==='clear-all')return clearAll()}
