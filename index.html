@@ -15,10 +15,10 @@
 #staffPrintRoot{display:none}
 @page{size:A4 portrait;margin:0}
 @media print{
-  html,body{width:210mm!important;margin:0!important;padding:0!important;background:white!important}
-  body>.app,body>#modalRoot,body>#toastRoot{display:none!important}
-  #staffPrintRoot{display:block!important}
-  .staff-sheet{width:210mm;height:297mm;padding:16mm 17mm 14mm;background:#fff;color:#151515;font-family:Arial,Helvetica,sans-serif;font-size:10pt;line-height:1.43;overflow:hidden;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  html,body{width:210mm!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important;background:white!important}
+  body>.app,body>#modalRoot,body>#toastRoot,body>#cloudAuth{display:none!important}
+  #staffPrintRoot{display:block!important;position:absolute;left:0;top:0;width:210mm;margin:0!important;padding:0!important;break-after:avoid;page-break-after:avoid}
+  .staff-sheet{width:210mm;height:295mm;max-height:295mm;break-after:avoid;page-break-after:avoid;padding:16mm 17mm 14mm;background:#fff;color:#151515;font-family:Arial,Helvetica,sans-serif;font-size:10pt;line-height:1.43;overflow:hidden;print-color-adjust:exact;-webkit-print-color-adjust:exact}
   .staff-sheet *{box-sizing:border-box}
   .staff-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1.3pt solid #161616;padding-bottom:7mm;gap:8mm}
   .staff-brand{font-family:Georgia,serif;letter-spacing:.14em;font-size:24pt;line-height:1}
@@ -107,8 +107,8 @@ body.cloud-locked .app{display:none!important}
  .mobile-signals-panel .signal-group .light{font-size:12px}
  .mobile-signals-panel .signal-note{overflow-wrap:anywhere}
  .assess-grid>.small-stack{display:none}
- .assess-grid .form-actions.assessment-inline-actions{display:flex;gap:9px;margin:20px 0 12px;padding:18px 0 0;border-top:1px solid #dededa}
- .assessment-inline-actions .btn:not(.ghost){flex:1 1 calc(50% - 5px);min-height:48px}
+ .assess-grid .form-actions.assessment-inline-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:9px;margin:20px 0 12px;padding:18px 0 0;border-top:1px solid #dededa}
+ .assessment-inline-actions .btn:not(.ghost){display:flex;align-items:center;justify-content:center;width:100%;height:54px;min-height:54px;padding:6px 10px;line-height:1.25;text-align:center;white-space:normal}
  .assessment-inline-actions .btn.ghost{display:none}
 }
 @media print{.mobile-signals-panel,.mobile-signals-toggle{display:none!important}}
