@@ -87,7 +87,7 @@ body.cloud-locked .app{display:none!important}
 .mobile-menu-close{display:none}
 .sidebar-scrim{display:none}
 @media(max-width:730px){
- html,body{max-width:100%;overflow-x:hidden}
+ html,body{max-width:100%;overflow-x:clip}
  body.sidebar-open{overflow:hidden}
  .sidebar-scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:19;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s,visibility .2s}
  body.sidebar-open .sidebar-scrim{opacity:1;visibility:visible;pointer-events:auto}
@@ -97,10 +97,20 @@ body.cloud-locked .app{display:none!important}
  .sidebar-head-mobile{display:flex;align-items:center;justify-content:space-between}
  .sidebar-head-mobile .brand{margin-left:9px}
  .main{padding:12px 12px 42px;min-width:0}
- .topbar{gap:8px;flex-wrap:wrap}
- .topbar .breadcrumbs{max-width:155px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
- .topbar>.actions:last-child{margin-left:auto}
- .cloud-user{max-width:100%;font-size:11px}
+ .topbar{gap:8px;flex-wrap:wrap;align-items:center}
+ .topbar>.actions:first-child{width:100%;min-width:0}
+ .topbar .breadcrumbs{max-width:calc(100vw - 116px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .topbar>.actions:last-child{width:100%;min-width:0;margin-left:0;display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:12px}
+ .topbar>.actions:last-child #languageToggle{margin-right:auto;flex:none}
+ .cloud-user{min-width:0;max-width:calc(100% - 104px);font-size:11px;margin-left:auto;justify-content:flex-end}
+ .cloud-user>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .cloud-user button{flex:none}
+ .field input[type="date"]{display:block;min-width:0;max-width:100%;width:100%;-webkit-appearance:none;appearance:none}
+ .field input[type="date"]::-webkit-date-and-time-value{min-width:0;text-align:left}
+ .field select{min-width:0;max-width:100%}
+ .columns{grid-template-columns:minmax(0,1fr)}
+ .columns .columns{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .panel,.field,.columns{min-width:0}
  .page-title{flex-wrap:wrap;margin:18px 0 15px;gap:10px}
  .page-title h1{font-size:27px}
  .page-title>.actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
