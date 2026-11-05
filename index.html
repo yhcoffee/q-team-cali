@@ -82,29 +82,36 @@ body.cloud-locked .app{display:none!important}
 .cloud-user{font-size:11px;color:#777;display:flex;align-items:center;gap:8px}
 .cloud-user button{font-size:11px;border:1px solid #ddd;background:#fff;padding:6px 9px;border-radius:7px;color:#333}
 
-/* Mobile assessment signals and actions */
-.mobile-assessment-actions{display:none}
+/* Assessment signal viewer and submission layout */
 .mobile-signals-toggle,.mobile-signals-panel{display:none}
+.rating.selected:not(.na){background:#e9e9e6;color:#171717;border:2px solid #555;box-shadow:inset 0 0 0 1px white;font-weight:700}
+.rating.selected:not(.na)::after{content:" ✓";font-weight:700}
 @media(max-width:730px){
- body.assessment-active .main{padding-bottom:calc(105px + env(safe-area-inset-bottom,0px))}
  .mobile-assessment-summary{justify-content:space-between}
- .mobile-signals-toggle{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-left:auto;min-height:42px;flex:1;max-width:210px;padding:9px 12px;border:1px solid #d5d5d1;border-radius:9px;background:#f6f6f4;color:#171717;font-size:13px;font-weight:700}
- .mobile-signals-toggle .chevron{font-size:18px;font-weight:400;line-height:1;transition:transform .15s}
- .mobile-signals-toggle[aria-expanded="true"] .chevron{transform:rotate(180deg)}
- .mobile-signals-panel{display:none;position:absolute;top:calc(100% + 1px);right:10px;left:10px;max-height:min(62dvh,520px);overflow-y:auto;overscroll-behavior:contain;padding:16px;background:#fff;border:1px solid #dcdcd7;border-radius:0 0 12px 12px;box-shadow:0 12px 30px #0002}
+ .mobile-signals-toggle{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-left:auto;min-height:44px;flex:1;max-width:210px;padding:9px 12px;border:1px solid #d5d5d1;border-radius:9px;background:#f6f6f4;color:#171717;font-size:13px;font-weight:700}
+ .mobile-signals-toggle .chevron{font-size:18px;font-weight:400;line-height:1}
+ .mobile-signals-panel{display:none;position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;z-index:110;background:#fff;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 18px calc(24px + env(safe-area-inset-bottom,0px));border:0;border-radius:0;box-shadow:none}
  .mobile-signals-panel.is-open{display:block}
- .mobile-signals-panel h3{font-size:14px;margin:0 0 10px;font-weight:700}
- .mobile-signals-panel .insight{padding:9px 0}
- .mobile-signals-panel .insight b{font-size:12px}
- .mobile-signals-panel .signal-group+.signal-group{margin-top:17px;padding-top:16px;border-top:1px solid #eee}
+ .signals-screen-header{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;background:#fff;padding:calc(16px + env(safe-area-inset-top,0px)) 0 14px;border-bottom:1px solid #dededa;margin-bottom:18px}
+ .signals-screen-header strong{font-size:19px;font-weight:600}
+ .signals-close{width:44px;height:44px;background:#f5f5f3;color:#171717;border:1px solid #ddd;border-radius:9px;font-size:25px;line-height:1}
+ .mobile-signals-panel .signal-group{border-radius:12px;padding:15px;border:1px solid #ddd}
+ .mobile-signals-panel .signal-group+.signal-group{margin-top:15px}
+ .mobile-signals-panel .signal-group.strength{border-color:#c7dbce;background:#f7fbf8}
+ .mobile-signals-panel .signal-group.coaching{border-color:#e7d8c2;background:#fffbf6}
+ .mobile-signals-panel h3{font-size:14px;margin:0 0 12px;font-weight:700;display:flex;align-items:center;gap:9px}
+ .mobile-signals-panel .signal-group.strength h3{color:var(--good)}
+ .mobile-signals-panel .signal-group.coaching h3{color:var(--amber)}
+ .mobile-signals-panel .insight{padding:10px 0;border-color:#dededa}
+ .mobile-signals-panel .insight b{font-size:13px;color:#222}
  .mobile-signals-panel .signal-group .light{font-size:12px}
+ .mobile-signals-panel .signal-note{overflow-wrap:anywhere}
  .assess-grid>.small-stack{display:none}
- .assess-grid .form-actions.assessment-inline-actions{display:none}
- .mobile-assessment-actions{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:24;gap:10px;padding:11px 13px calc(11px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid #dededa;box-shadow:0 -4px 20px #0000000b}
- .mobile-assessment-actions .btn{flex:1;min-width:0;min-height:46px;font-size:13px}
- body.sidebar-open .mobile-assessment-actions{visibility:hidden}
+ .assess-grid .form-actions.assessment-inline-actions{display:flex;gap:9px;margin:20px 0 12px;padding:18px 0 0;border-top:1px solid #dededa}
+ .assessment-inline-actions .btn:not(.ghost){flex:1 1 calc(50% - 5px);min-height:48px}
+ .assessment-inline-actions .btn.ghost{display:none}
 }
-@media print{.mobile-assessment-actions,.mobile-signals-panel,.mobile-signals-toggle{display:none!important}}
+@media print{.mobile-signals-panel,.mobile-signals-toggle{display:none!important}}
 /* Mobile assessment controls */
 .mobile-assessment-summary{display:none}
 .mobile-menu-close{display:none}
@@ -254,6 +261,35 @@ function mobileStrengthSignalHTML(a){
  const strong=getStrongDomains(a);
  return strong.length?strong.map(d=>`<div class="insight"><b>${esc(zhName(d))}</b></div>`).join(''):`<p class="light">${lang('No strong categories identified yet.','目前尚无达到优势标准的类别。')}</p>`;
 }
+let mobileSignalsScrollY=0;
+function openMobileSignals(){
+ const panel=document.getElementById('mobileSignalsPanel');
+ if(!panel||mobileSignalsOpen)return;
+ mobileSignalsScrollY=window.scrollY;
+ mobileSignalsOpen=true;
+ panel.classList.add('is-open');
+ document.getElementById('mobileSignalsToggle')?.setAttribute('aria-expanded','true');
+ document.body.style.position='fixed';
+ document.body.style.top='-'+mobileSignalsScrollY+'px';
+ document.body.style.left='0';
+ document.body.style.right='0';
+ document.body.style.width='100%';
+ panel.scrollTop=0;
+ document.getElementById('mobileSignalsClose')?.focus({preventScroll:true});
+}
+function closeMobileSignals(){
+ if(!mobileSignalsOpen)return;
+ mobileSignalsOpen=false;
+ document.getElementById('mobileSignalsPanel')?.classList.remove('is-open');
+ document.getElementById('mobileSignalsToggle')?.setAttribute('aria-expanded','false');
+ document.body.style.position='';
+ document.body.style.top='';
+ document.body.style.left='';
+ document.body.style.right='';
+ document.body.style.width='';
+ window.scrollTo(0,mobileSignalsScrollY);
+ document.getElementById('mobileSignalsToggle')?.focus({preventScroll:true});
+}
 function refreshMobileSignals(){
  const strength=document.getElementById('mobileStrengthSignals');
  const coaching=document.getElementById('mobileCoachingSignals');
@@ -296,7 +332,7 @@ function setRoute(next,replace=false){
  try{history[fn]({yihuiCalibration:true,...next},'',url)}catch(e){history[fn]({yihuiCalibration:true,...next},'')}
 }
 function navigate(view,pid=null,aid=null,tab='overview'){
- mobileSignalsOpen=false;
+ closeMobileSignals();
  if(dirty&&!confirm('Discard unsaved changes to this assessment?'))return;
  const next={view,personId:pid,assessmentId:aid,tab};
  const samePersonTab=state.view==='person'&&view==='person'&&state.personId===pid;
@@ -305,7 +341,7 @@ function navigate(view,pid=null,aid=null,tab='overview'){
  if(!samePersonTab)window.scrollTo(0,0);
 }
 function restoreBrowserRoute(){
- mobileSignalsOpen=false;
+ closeMobileSignals();
  const next=routeFromHash();
  if(dirty&&!confirm('Discard unsaved changes to this assessment?')){
   // Restore the current view in the address bar without discarding the draft.
@@ -359,7 +395,7 @@ function syncLanguageSwitch(){
    option.style.setProperty('color',active?'#ffffff':'#777777','important');
  });
 }
-function setAssessmentLanguage(next){if(next===assessmentLanguage)return;assessmentLanguage=next;try{localStorage.setItem('yihui_calibration_language',next)}catch(e){}const y=window.scrollY;render();window.scrollTo(0,y)}
+function setAssessmentLanguage(next){if(next===assessmentLanguage)return;closeMobileSignals();assessmentLanguage=next;try{localStorage.setItem('yihui_calibration_language',next)}catch(e){}const y=window.scrollY;render();window.scrollTo(0,y)}
 function zhName(d){return assessmentLanguage==="zh"?(ZH_CRITERIA[d.id]?.[0]||d.title||d.name):(d.title||d.name)}
 function zhDesc(it){return assessmentLanguage==="zh"?(ZH_CRITERIA[it.id]?.[1]||it.desc):it.desc}
 function lang(en,zh){return assessmentLanguage==="zh"?zh:en}
@@ -379,9 +415,9 @@ function renderAssessment(){
  }).join('')}</div>`).join('');
  const buttons=`<div class="form-actions no-print assessment-inline-actions"><button class="btn" data-action="save-draft">${lang('Save draft','保存草稿')}</button><button class="btn black" data-action="finalize">${draft.status==='final'?lang('Save completed assessment','保存已完成评估'):lang('Complete assessment','完成评估')}</button><button class="btn ghost" data-action="back-person">${lang('Cancel','取消')}</button></div>`;
  const sidebar=`<div class="small-stack sticky"><div class="panel snapshot-panel"><div class="section-title"><h2>${lang('Live snapshot','实时概况')}</h2><span class="pill">${num} / ${items.length}</span></div><div class="metric" style="padding:9px;border:0"><span class="tiny">${lang('Observed score','已观察项目平均分')}</span><strong>${pct(v)}<span style="font:13px DM Sans;color:#aaa"> / 4</span></strong></div><div class="progress" style="margin-bottom:16px"><span style="width:${num/items.length*100}%"></span></div><div class="small-stack">${domainsToShow.map(d=>`<div class="stat-line"><span>${esc(assessmentLanguage==='zh'?ZH_CRITERIA[d.id]?.[1]||d.short:d.short)}</span><b>${pct(oneDomain(draft,d))}</b></div>`).join('')}</div></div><div class="panel"><div class="section-title"><h2>${lang('Strength signals','优势信号')}</h2><span class="pill good">${lang('By category','按类别')}</span></div>${strong.length?strong.map(d=>`<div class="insight"><b>${esc(zhName(d))}</b></div>`).join(''):`<p class="light">${lang('Categories that are consistently strong will appear here.','达到持续优秀标准的类别将在此显示。')}</p>`}</div><div class="panel"><div class="section-title"><h2>${lang('Coaching signals','辅导重点')}</h2><span class="pill amber">${lang('Ratings & notes','评分与记录')}</span></div><div id="coachingSignals">${coachingSignalHTML(draft)}</div></div></div>`;
- const mobileSummary=`<div id="mobileScoreAnchor" class="mobile-score-anchor"><div class="mobile-assessment-summary"><div><div class="mobile-score-label">${lang('Observed average','已观察平均分')}</div><div class="mobile-score">${pct(v)} <small>/ 4</small></div></div><button type="button" id="mobileSignalsToggle" class="mobile-signals-toggle" aria-expanded="${mobileSignalsOpen}" aria-controls="mobileSignalsPanel">${lang('Signals','评估信号')} <span class="chevron" aria-hidden="true">⌄</span></button><div id="mobileSignalsPanel" class="mobile-signals-panel ${mobileSignalsOpen?'is-open':''}"><div class="signal-group"><h3>${lang('Strength signals','优势信号')}</h3><div id="mobileStrengthSignals">${mobileStrengthSignalHTML(draft)}</div></div><div class="signal-group"><h3>${lang('Coaching signals','辅导重点')}</h3><div id="mobileCoachingSignals">${coachingSignalHTML(draft)}</div></div></div></div></div>`;
- const mobileActions=`<div class="mobile-assessment-actions no-print"><button class="btn" data-action="save-draft">${lang('Save draft','保存草稿')}</button><button class="btn black" data-action="finalize">${draft.status==='final'?lang('Save assessment','保存评估'):lang('Complete assessment','完成评估')}</button></div>`;
- return `${header}${mobileSummary}<div class="assess-grid"><div>${dateFields}${domains}${buttons}</div>${sidebar}</div>${mobileActions}`;
+ const mobileSummary=`<div id="mobileScoreAnchor" class="mobile-score-anchor"><div class="mobile-assessment-summary"><div><div class="mobile-score-label">${lang('Observed average','已观察平均分')}</div><div class="mobile-score">${pct(v)} <small>/ 4</small></div></div><button type="button" id="mobileSignalsToggle" class="mobile-signals-toggle" aria-expanded="false" aria-controls="mobileSignalsPanel">${lang('Signals','评估信号')} <span class="chevron" aria-hidden="true">⌄</span></button></div></div>`;
+ const mobilePanel=`<section id="mobileSignalsPanel" class="mobile-signals-panel" role="dialog" aria-modal="true" aria-label="${lang('Assessment signals','评估信号')}"><div class="signals-screen-header"><strong>${lang('Assessment signals','评估信号')}</strong><button id="mobileSignalsClose" class="signals-close" type="button" aria-label="${lang('Close signals','关闭信号')}">×</button></div><div class="signal-group strength"><h3>${lang('Strength signals','优势信号')}</h3><div id="mobileStrengthSignals">${mobileStrengthSignalHTML(draft)}</div></div><div class="signal-group coaching"><h3>${lang('Coaching signals','辅导重点')}</h3><div id="mobileCoachingSignals">${coachingSignalHTML(draft)}</div></div></section>`;
+ return `${header}${mobileSummary}<div class="assess-grid"><div>${dateFields}${domains}${buttons}</div>${sidebar}</div>${mobilePanel}`;
 }
 function renderSettings(){return `${pageTitle('Data & backup','Manage secure cloud records and JSON backups.')}<div class="grid two"><div class="panel"><div class="section-title"><h2>Backup & restore</h2></div><p>Team records are stored in Firebase and shared with authorized management accounts. Export JSON periodically as an additional backup.</p><div class="form-actions"><button class="btn black" data-action="export">Download JSON backup</button><button class="btn" data-action="import">Import JSON backup</button></div><p class="light">Import replaces the shared Firebase dataset for all managers after confirmation. Export first if you want to keep a copy of the current state.</p></div><div class="panel"><div class="section-title"><h2>Records</h2></div><div class="stat-line"><span>Baristas</span><b>${data.people.length}</b></div><div class="stat-line"><span>Assessments</span><b>${data.assessments.length}</b></div><div class="stat-line"><span>Last saved</span><b>${data.updatedAt?new Date(data.updatedAt).toLocaleString():'Not yet'}</b></div><div class="form-actions"><button class="btn danger" data-action="clear-all">Delete all cloud data</button></div></div></div><div class="panel" style="margin-top:15px"><div class="section-title"><h2>About the records</h2></div><p class="muted">Each barista has a stable profile. Assessments are stored separately with their own date, quarter, scores, notes, and improvement actions. Trend calculations compare only criteria actually scored in both completed assessments; No Observation answers are excluded. Completed assessments can be edited and retained for quarterly comparison.</p><p class="muted">This hosted version requires Firebase sign-in and an approved manager account. Signed-in managers share the same records. Avoid editing the same assessment simultaneously on multiple devices.</p></div>`}
 function bindContent(){document.querySelectorAll('[data-action]').forEach(el=>el.onclick=()=>action(el.dataset.action));document.querySelectorAll('[data-open-person]').forEach(el=>el.onclick=()=>navigate('person',el.dataset.openPerson));document.querySelectorAll('[data-new-assess]').forEach(el=>el.onclick=()=>startAssessment(el.dataset.newAssess));document.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>navigate('person',state.personId,null,el.dataset.tab));document.querySelectorAll('[data-view-assess],[data-edit-assess]').forEach(el=>el.onclick=()=>openAssessment(el.dataset.viewAssess||el.dataset.editAssess));document.querySelectorAll('[data-delete-assess]').forEach(el=>el.onclick=()=>deleteAssessment(el.dataset.deleteAssess));document.querySelectorAll('[data-print-plan]').forEach(el=>el.onclick=()=>{const a=data.assessments.find(x=>x.id===el.dataset.printPlan);if(a)printStaffReport(a)});if(state.view==='assessment')bindAssessment();bindBaristaDrag()}
@@ -428,13 +464,11 @@ function bindBaristaDrag(){
 }
 function bindAssessment(){
  const toggle=document.getElementById('mobileSignalsToggle');
- if(toggle)toggle.onclick=()=>{
-  mobileSignalsOpen=!mobileSignalsOpen;
-  toggle.setAttribute('aria-expanded',String(mobileSignalsOpen));
-  document.getElementById('mobileSignalsPanel')?.classList.toggle('is-open',mobileSignalsOpen);
- };
+ if(toggle)toggle.onclick=()=>openMobileSignals();
+ const close=document.getElementById('mobileSignalsClose');
+ if(close)close.onclick=()=>closeMobileSignals();
  document.querySelectorAll('[data-rate]').forEach(el=>el.onclick=()=>{
-  mobileSignalsOpen=false;
+  closeMobileSignals();
   draft.ratings[el.dataset.rate]=el.dataset.value;dirty=true;render();
  });
  document.querySelectorAll('[data-note]').forEach(el=>el.oninput=()=>{
@@ -487,15 +521,9 @@ document.getElementById('dashboardLink').onclick=()=>navigate('dashboard');docum
 document.getElementById('closeMenu').onclick=escapeSide;
 document.getElementById('sidebarScrim').onclick=escapeSide;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){
+ if(mobileSignalsOpen){closeMobileSignals();return;}
  escapeSide();
- if(mobileSignalsOpen){mobileSignalsOpen=false;const panel=document.getElementById('mobileSignalsPanel');panel?.classList.remove('is-open');document.getElementById('mobileSignalsToggle')?.setAttribute('aria-expanded','false')}
 }});
-document.addEventListener('click',e=>{
- if(!mobileSignalsOpen||e.target.closest('#mobileScoreAnchor'))return;
- mobileSignalsOpen=false;
- document.getElementById('mobileSignalsPanel')?.classList.remove('is-open');
- document.getElementById('mobileSignalsToggle')?.setAttribute('aria-expanded','false');
-});
 document.getElementById('addPersonSide').addEventListener('click',escapeSide);
 window.matchMedia('(min-width:731px)').addEventListener('change',e=>{if(e.matches)escapeSide()});window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});window.addEventListener('popstate',restoreBrowserRoute);
 window.addEventListener('scroll',updateMobileScorePosition,{passive:true});
