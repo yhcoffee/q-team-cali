@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Static deployment refresh; application version remains v1.17. -->
+<!-- Assessment auto-save release v1.19. -->
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -191,12 +191,13 @@ body.cloud-locked .app{display:none!important}
 @media(min-width:731px){.sidebar-head-mobile{display:contents}}
 </style>
 </head>
-<body class="cloud-locked"><div id="cloudAuth" class="cloud-auth"><div class="cloud-login"><h1>YIHUI</h1><div class="tiny">TEAM CALIBRATION · MANAGER ACCESS</div><p>Sign in with an approved management account to access team assessments.</p><form id="cloudLoginForm"><label>Email<input id="cloudEmail" type="email" autocomplete="username" required></label><label>Password<input id="cloudPassword" type="password" autocomplete="current-password" required></label><button id="cloudLoginButton" type="submit">Sign in</button></form><div class="cloud-message" id="cloudMessage" role="status">Connecting to Firebase…</div><button id="cloudSignOut" type="button" style="background:#eee;color:#222;margin-top:12px;display:none">Sign out / switch account</button></div></div><div class="app"><aside id="sidebar"><div class="sidebar-head-mobile"><div class="brand">YIHUI</div><button id="closeMenu" class="mobile-menu-close" type="button" aria-label="Close menu">×</button></div><div class="aside-label"><span class="tiny">TEAM CALIBRATION</span></div><button class="side-link" id="dashboardLink"><span style="font-size:17px">▦</span><span class="side-name">Overview</span></button><div class="aside-label"><span class="tiny">TEAM MEMBERS</span><button class="iconbtn" id="addPersonSide" title="Add team member">＋</button></div><div class="side-list" id="peopleList"></div><div class="side-footer"><button class="side-link" id="settingsLink"><span>⚙</span><span>Data & backup</span></button><div class="light" style="padding:0 11px">Saved in this browser · export backups regularly</div></div></aside><div id="sidebarScrim" class="sidebar-scrim" aria-hidden="true"></div><main class="main"><div class="topbar"><div class="actions"><button class="btn small sidebar-toggle" id="menuButton">☰ Menu</button><span class="breadcrumbs" id="breadcrumbs">Overview</span></div><div class="actions"><span class="pill" id="saveState" style="display:none" aria-hidden="true">Local storage</span><button type="button" class="language-toggle" id="languageToggle" style="display:none" aria-label="Switch assessment language between English and Chinese" aria-pressed="false" title="English / 中文"><span>EN</span><span>中文</span></button><span class="cloud-user" id="cloudUser"></span></div></div><div id="content"></div><div class="footer-note">YIHUI · TEAM CALIBRATION · Management use only · <span class="app-version" id="appVersion" title="Team Calibration app version">v1.18</span></div></main></div><div id="modalRoot"></div><div id="toastRoot"></div>
+<body class="cloud-locked"><div id="cloudAuth" class="cloud-auth"><div class="cloud-login"><h1>YIHUI</h1><div class="tiny">TEAM CALIBRATION · MANAGER ACCESS</div><p>Sign in with an approved management account to access team assessments.</p><form id="cloudLoginForm"><label>Email<input id="cloudEmail" type="email" autocomplete="username" required></label><label>Password<input id="cloudPassword" type="password" autocomplete="current-password" required></label><button id="cloudLoginButton" type="submit">Sign in</button></form><div class="cloud-message" id="cloudMessage" role="status">Connecting to Firebase…</div><button id="cloudSignOut" type="button" style="background:#eee;color:#222;margin-top:12px;display:none">Sign out / switch account</button></div></div><div class="app"><aside id="sidebar"><div class="sidebar-head-mobile"><div class="brand">YIHUI</div><button id="closeMenu" class="mobile-menu-close" type="button" aria-label="Close menu">×</button></div><div class="aside-label"><span class="tiny">TEAM CALIBRATION</span></div><button class="side-link" id="dashboardLink"><span style="font-size:17px">▦</span><span class="side-name">Overview</span></button><div class="aside-label"><span class="tiny">TEAM MEMBERS</span><button class="iconbtn" id="addPersonSide" title="Add team member">＋</button></div><div class="side-list" id="peopleList"></div><div class="side-footer"><button class="side-link" id="settingsLink"><span>⚙</span><span>Data & backup</span></button><div class="light" style="padding:0 11px">Saved in this browser · export backups regularly</div></div></aside><div id="sidebarScrim" class="sidebar-scrim" aria-hidden="true"></div><main class="main"><div class="topbar"><div class="actions"><button class="btn small sidebar-toggle" id="menuButton">☰ Menu</button><span class="breadcrumbs" id="breadcrumbs">Overview</span></div><div class="actions"><span class="pill" id="saveState" style="display:none" aria-hidden="true">Local storage</span><button type="button" class="language-toggle" id="languageToggle" style="display:none" aria-label="Switch assessment language between English and Chinese" aria-pressed="false" title="English / 中文"><span>EN</span><span>中文</span></button><span class="cloud-user" id="cloudUser"></span></div></div><div id="content"></div><div class="footer-note">YIHUI · TEAM CALIBRATION · Management use only · <span class="app-version" id="appVersion" title="Team Calibration app version">v1.19</span></div></main></div><div id="modalRoot"></div><div id="toastRoot"></div>
 <div id="staffPrintRoot" aria-hidden="true"></div>
 <script>
 'use strict';
-const APP_VERSION='1.18';
+const APP_VERSION='1.19';
 const KEY='yihui_calibration_v1';
+const ASSESSMENT_RECOVERY_KEY='yihui_calibration_assessment_recovery_v1';
 const DOMAINS=[
 {id:'recipes',title:'Recipe knowledge & consistency',short:'Recipes',items:[
 {id:'recipe_ingredients',name:'Ingredient recall',desc:'Knows ingredients, syrups, allergens and intended flavor of current menu.',action:'Review and recall current drink builds; confirm ingredients and allergens using the approved recipe book.'},
@@ -236,7 +237,7 @@ const DOMAINS=[
 {id:'lead_feedback',name:'Communication & accountability',desc:'Corrects inconsistent work respectfully and directly; applies the same standards to everyone and closes the loop.',action:'Address one concrete standards gap with a clear expectation and follow-up.'}
 ]}];
 const allItems=DOMAINS.flatMap(d=>d.items.map(x=>({...x,domainId:d.id,domainTitle:d.title,domainShort:d.short})));
-let data=load(),state={view:'dashboard',personId:null,assessmentId:null,tab:'overview',filter:'all'},draft=null,dirty=false;
+let data=load(),state={view:'dashboard',personId:null,assessmentId:null,tab:'overview',filter:'all'},draft=null,dirty=false,assessmentAutoTimer=null,assessmentAutoPending=false;
 function uid(){return 'id_'+Math.random().toString(36).slice(2,10)+'_'+Date.now().toString(36)}
 function load(){try{let x=JSON.parse(localStorage.getItem(KEY));if(x&&Array.isArray(x.people)&&Array.isArray(x.assessments))return x}catch(e){}return {version:1,people:[],assessments:[],updatedAt:null}}
 function persist(){
@@ -248,6 +249,65 @@ function persist(){
     window.__calibrationCloudSave(structuredClone(data));
     return true;
   }catch(e){document.getElementById('saveState').textContent='Not synced — export backup'; alert('Unable to queue cloud save: '+e.message); return false}
+}
+function rememberAssessmentDraft(){
+ if(!draft||state.view!=='assessment')return;
+ draft.updatedAt=new Date().toISOString();
+ if(draft.status==='final')draft.status='draft';
+ const idx=data.assessments.findIndex(a=>a.id===draft.id);
+ if(idx<0)return;
+ data.assessments[idx]=structuredClone(draft);
+ data.updatedAt=draft.updatedAt;
+ dirty=false;
+ assessmentAutoPending=true;
+ try{
+  localStorage.setItem(ASSESSMENT_RECOVERY_KEY,JSON.stringify({id:draft.id,savedAt:draft.updatedAt,assessment:structuredClone(draft)}));
+  localStorage.setItem(KEY,JSON.stringify(data));
+ }catch(e){
+  document.getElementById('saveState').textContent='Local draft storage unavailable';
+ }
+}
+function scheduleAssessmentAutosave(){
+ rememberAssessmentDraft();
+ clearTimeout(assessmentAutoTimer);
+ assessmentAutoTimer=setTimeout(flushAssessmentAutosave,1100);
+}
+function flushAssessmentAutosave(){
+ clearTimeout(assessmentAutoTimer);
+ assessmentAutoTimer=null;
+ if(!assessmentAutoPending)return;
+ if(typeof window.__calibrationCloudSave!=='function'){
+  document.getElementById('saveState').textContent='Draft saved on this device · Cloud unavailable';
+  return;
+ }
+ try{
+  window.__calibrationCloudSave(structuredClone(data));
+  assessmentAutoPending=false;
+ }catch(e){
+  document.getElementById('saveState').textContent='Draft saved on this device · Cloud unavailable';
+ }
+}
+function restoreRecoveredAssessment(remote){
+ let recovery;
+ try{recovery=JSON.parse(localStorage.getItem(ASSESSMENT_RECOVERY_KEY)||'null')}catch(e){return false}
+ if(!recovery?.assessment||!recovery.id)return false;
+ const i=data.assessments.findIndex(a=>a.id===recovery.id);
+ if(i<0){try{localStorage.removeItem(ASSESSMENT_RECOVERY_KEY)}catch(e){}return false}
+ const existing=data.assessments[i],recovered=recovery.assessment;
+ if(recovered.personId!==existing.personId||existing.status==='final')return false;
+ if(Date.parse(recovery.savedAt||0)<=Date.parse(existing.updatedAt||0)){
+  try{localStorage.removeItem(ASSESSMENT_RECOVERY_KEY)}catch(e){}
+  return false;
+ }
+ data.assessments[i]=structuredClone(recovered);
+ assessmentAutoPending=true;
+ return true;
+}
+function clearAssessmentRecovery(id){
+ try{
+  const record=JSON.parse(localStorage.getItem(ASSESSMENT_RECOVERY_KEY)||'null');
+  if(record?.id===id)localStorage.removeItem(ASSESSMENT_RECOVERY_KEY);
+ }catch(e){}
 }
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function fmt(d){if(!d)return '—';return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
@@ -351,7 +411,7 @@ function setRoute(next,replace=false){
 }
 function navigate(view,pid=null,aid=null,tab='overview'){
  closeMobileSignals();
- if(dirty&&!confirm('Discard unsaved changes to this assessment?'))return;
+ if(state.view==='assessment')flushAssessmentAutosave();
  const next={view,personId:pid,assessmentId:aid,tab};
  const samePersonTab=state.view==='person'&&view==='person'&&state.personId===pid;
  dirty=false;draft=null;state={...state,...next};setRoute(next);
@@ -361,10 +421,7 @@ function navigate(view,pid=null,aid=null,tab='overview'){
 function restoreBrowserRoute(){
  closeMobileSignals();
  const next=routeFromHash();
- if(dirty&&!confirm('Discard unsaved changes to this assessment?')){
-  // Restore the current view in the address bar without discarding the draft.
-  setRoute(state);return;
- }
+ if(state.view==='assessment')flushAssessmentAutosave();
  dirty=false;draft=null;state={...state,...next};escapeSide();render();window.scrollTo(0,0);
 }
 function renderSidebar(){document.getElementById('dashboardLink').classList.toggle('active',state.view==='dashboard');document.getElementById('settingsLink').classList.toggle('active',state.view==='settings');document.getElementById('peopleList').innerHTML=data.people.slice().map(p=>{let a=latest(p);return `<button type="button" data-drag-person="${esc(p.id)}" class="side-link ${state.personId===p.id?'active':''}" data-person="${esc(p.id)}"><span class="drag-handle" draggable="true" data-drag-handle="${esc(p.id)}" title="Drag to reorder" aria-label="Drag to reorder">⠿</span><span class="avatar">${esc(initials(p.name))}</span><span class="side-name">${esc(p.name)}</span><span class="side-meta">${a?'●':'○'}</span></button>`}).join('')||'<div class="light" style="padding:13px">No team members added yet.</div>';document.querySelectorAll('[data-person]').forEach(b=>b.onclick=()=>navigate('person',b.dataset.person));document.getElementById('breadcrumbs').textContent=state.view==='dashboard'?'Overview':state.view==='settings'?'Data & backup':(person(state.personId)?.name||'Barista')+(state.view==='assessment'?' / Assessment':'')}
@@ -394,7 +451,7 @@ function renderProfileOverview(p,a,b,dt,drafts){if(!a)return `<div class="panel"
 function renderHistory(p,aa){return `<div class="panel"><div class="section-title"><h2>Assessment history</h2><span class="light">Completed records are retained unless deliberately deleted</span></div>${!aa.length?'<div class="empty">No assessment history.</div>':aa.map((a,i)=>{const older=aa.slice(i+1).find(x=>x.status==='final'),delta=a.status==='final'?trend(a,older):null;return `<div class="history-card"><div class="history-top"><div><b>${esc(a.quarter||quarter(a.date))}</b> <span class="pill ${a.status==='draft'?'amber':'good'}">${a.status==='draft'?'Draft':'Completed'}</span><div class="light">${fmt(a.date)} · ${esc(a.assessor||'No assessor')} · ${scored(a)}/${assessmentItems(a).length} observed</div></div><div style="text-align:right"><b style="font-size:18px">${pct(mean(a))}</b><div>${trendHTML(delta)}</div></div></div><div class="form-actions"><button class="btn small" data-${a.status==='draft'?'edit':'view'}-assess="${esc(a.id)}">${a.status==='draft'?'Continue draft':'View / edit'}</button><button class="btn small danger" data-delete-assess="${esc(a.id)}">Delete</button></div></div>`}).join('')}</div>`}
 function blankAssessment(pid){return {id:uid(),personId:pid,date:dateNow(),quarter:quarter(),assessor:'',status:'draft',leadershipTrack:isLeadershipRole(person(pid)),ratings:{},notes:{},strengthsNote:'',contextNote:'',summaryNote:'',plan:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()}}
 function startAssessment(pid){let p=person(pid);if(!p)return;let a=blankAssessment(pid);data.assessments.push(a);persist();state.personId=pid;openAssessment(a.id)}
-function openAssessment(id){const a=data.assessments.find(x=>x.id===id);if(!a)return;if(dirty&&!confirm('Discard unsaved changes to this assessment?'))return;draft=structuredClone(a);dirty=false;state={...state,view:'assessment',personId:a.personId,assessmentId:id};setRoute(state);escapeSide();render();window.scrollTo(0,0)}
+function openAssessment(id){const a=data.assessments.find(x=>x.id===id);if(!a)return;if(state.view==='assessment')flushAssessmentAutosave();draft=structuredClone(a);dirty=false;state={...state,view:'assessment',personId:a.personId,assessmentId:id};setRoute(state);escapeSide();render();window.scrollTo(0,0)}
 const ZH_CRITERIA={"recipes":["配方知识与一致性","配方"],"coffee":["咖啡技术","咖啡"],"workflow":["工作流程与效率","流程"],"clean":["清洁与整理","清洁"],"service":["顾客服务与判断","服务"],"team":["团队合作与责任心","团队"],"recipe_ingredients":["原料与配方知识","清楚掌握饮品所需原料、比例和制作方式。"],"recipe_measure":["配方用量与甜度标准","准确使用标准克数、容量及已批准的甜度调整，不凭感觉决定。"],"recipe_execution":["饮品制作与出品","遵循标准制作顺序、流程和外观要求。"],"recipe_mods":["客制化判断","了解允许的调整、何时询问主管及何时解释限制。"],"coffee_dial":["浓缩咖啡校准与调整","通过品尝和测量做出合理调整，并清楚交接参数。"],"coffee_extraction":["萃取一致性","确保布粉、压粉、萃取参数及出品品质稳定。"],"coffee_milk":["奶泡质地与温度","制作稳定细腻的奶泡，控制温度并正确处理牛奶。"],"coffee_finish":["拉花与出品检查","达到出品要求，并在交付前确认饮品品质。"],"flow_priority":["订单优先顺序","合理安排饮品顺序，兼顾品质与订单先后。"],"flow_pace":["高峰期工作节奏","繁忙时保持效率，同时维持品质。"],"flow_handoff":["沟通与交接","清晰交接需求、饮品进度、班次和工作站情况。"],"flow_awareness":["工作站观察与主动性","主动发现备料需求、瓶颈和可协助的事项。"],"clean_glass":["玻璃器皿与设备维护","确保器皿洁净干燥，正确使用和维护设备。"],"clean_station":["工作站清洁与卫生","服务过程中持续保持工作区域清洁且符合食品安全要求。"],"clean_stock":["补货与备料","主动检查库存、配料、咖啡豆、杯盖及开店备料。"],"clean_close":["换班交接与收尾标准","完成交接和收尾工作，不提前停止对客服务。"],"service_guest":["顾客沟通","与顾客清晰、尊重且得体地沟通。"],"service_recover":["服务问题处理","冷静处理做错的饮品、顾客不满与重做要求。"],"service_mod":["客制化需求说明","在顾客喜好与配方标准之间保持合理平衡。"],"service_ownership":["判断与上报","能独立处理常规问题，并及时将例外情况交由主管。"],"team_support":["团队协助与合作","主动支持同事，同时保持工作分工清晰。"],"team_feedback":["接受与落实反馈","愿意听取反馈、确认要求并在工作中改进。"],"team_follow":["任务跟进与责任感","可靠完成任务，离岗前主动说明未完成事项。"],"team_standards":["遵守共同标准","持续遵循既定操作规范，不随意改用个人习惯。"],"leadership":["人员管理与带班领导力","带班管理"],"lead_delegate":["任务分配与责任落实","明确分配任务、优先级、负责人及完成标准，并检查执行结果，而非事事亲力亲为。"],"lead_develop":["指导与培养团队成员","及时提供具体反馈，示范操作标准，帮助同事逐步独立完成工作。"],"lead_supervise":["现场监督与任务跟进","监督休息时间、打卡、配方执行、清洁及任务完成情况，并及时纠正问题。"],"lead_priorities":["明确并统一班次优先事项","在开店、高峰期及交接时说明工作顺序，让团队清楚当前最重要的任务。"],"lead_feedback":["沟通与责任落实","以尊重且明确的方式纠正不一致的操作，统一执行标准并持续跟进。"]};
 let assessmentLanguage=localStorage.getItem('yihui_calibration_language')==='zh'?'zh':'en';
 function syncLanguageSwitch(){
@@ -431,7 +488,7 @@ function renderAssessment(){
  const rate=Number(draft.ratings?.[it.id]),required=[1,2].includes(rate),noNote=!String(draft.notes?.[it.id]||'').trim();
  return `<div class="criterion" data-criterion="${it.id}"><div class="criterion-top"><div><div class="criterion-name">${esc(zhName(it))}</div><div class="criterion-desc">${esc(zhDesc(it))}</div></div></div><div class="ratings">${[1,2,3,4,'NO'].map(n=>`<button class="rating ${n==='NO'?'na':''} ${String(draft.ratings?.[it.id]??'')===String(n)?'selected':''}" data-rate="${it.id}" data-value="${n}" title="${n==='NO'?lang('Not observed','未观察'):['',lang('Needs coaching','需要辅导'),lang('Developing / inconsistent','仍在提升 / 不稳定'),lang('Meets standard','达到标准'),lang('Consistently strong','持续优秀')][n]}">${n==='NO'?lang('No Observation','未观察'):n+' · '+['',lang('Needs coaching','需要辅导'),lang('Developing','仍在提升'),lang('Meets','达标'),lang('Strong','优秀')][n]}</button>`).join('')}</div><details class="criterion-note ${required&&noNote?'needs-observation':''}" ${required||draft.notes?.[it.id]?'open':''}><summary>${required?lang('Required observation','必填观察记录'):(draft.notes?.[it.id]?lang('Edit observation','编辑观察记录'):lang('+ Add observation','＋添加观察记录'))}${required?' *':''}</summary><textarea rows="2" data-note="${it.id}" aria-required="${required}" placeholder="${lang('Describe a specific behavior or example observed during service.','请记录具体观察到的行为或工作中的实例。')}">${esc(draft.notes?.[it.id]||'')}</textarea>${required&&noNote?`<p class="required-tip">${lang('A written observation is required for a rating of 1 or 2.','评分为 1 或 2 时，必须填写具体观察记录。')}</p>`:''}</details></div>`;
  }).join('')}</div>`).join('');
- const buttons=`<div class="form-actions no-print assessment-inline-actions"><button class="btn" data-action="save-draft">${lang('Save draft','保存草稿')}</button><button class="btn black" data-action="finalize">${draft.status==='final'?lang('Save completed assessment','保存已完成评估'):lang('Complete assessment','完成评估')}</button><button class="btn ghost" data-action="back-person">${lang('Cancel','取消')}</button></div>`;
+ const buttons=`<div class="assessment-autosave-note no-print">${lang('Changes save automatically as a draft.','修改会自动保存为草稿。')}</div><div class="form-actions no-print assessment-inline-actions"><button class="btn" data-action="save-draft">${lang('Save draft','保存草稿')}</button><button class="btn black" data-action="finalize">${draft.status==='final'?lang('Save completed assessment','保存已完成评估'):lang('Complete assessment','完成评估')}</button><button class="btn ghost" data-action="back-person">${lang('Cancel','取消')}</button></div>`;
  const sidebar=`<div class="small-stack sticky"><div class="panel snapshot-panel"><div class="section-title"><h2>${lang('Live snapshot','实时概况')}</h2><span class="pill">${num} / ${items.length}</span></div><div class="metric" style="padding:9px;border:0"><span class="tiny">${lang('Observed score','已观察项目平均分')}</span><strong>${pct(v)}<span style="font:13px DM Sans;color:#aaa"> / 4</span></strong></div><div class="progress" style="margin-bottom:16px"><span style="width:${num/items.length*100}%"></span></div><div class="small-stack">${domainsToShow.map(d=>`<div class="stat-line"><span>${esc(assessmentLanguage==='zh'?ZH_CRITERIA[d.id]?.[1]||d.short:d.short)}</span><b>${pct(oneDomain(draft,d))}</b></div>`).join('')}</div></div><div class="panel"><div class="section-title"><h2>${lang('Strength signals','优势信号')}</h2><span class="pill good">${lang('By category','按类别')}</span></div>${strong.length?strong.map(d=>`<div class="insight"><b>${esc(zhName(d))}</b></div>`).join(''):`<p class="light">${lang('Categories that are consistently strong will appear here.','达到持续优秀标准的类别将在此显示。')}</p>`}</div><div class="panel"><div class="section-title"><h2>${lang('Coaching signals','辅导重点')}</h2><span class="pill amber">${lang('Ratings & notes','评分与记录')}</span></div><div id="coachingSignals">${coachingSignalHTML(draft)}</div></div></div>`;
  const mobileSummary=`<div id="mobileScoreAnchor" class="mobile-score-anchor"><div class="mobile-assessment-summary"><div><div class="mobile-score-label">${lang('Observed average','已观察平均分')}</div><div class="mobile-score">${pct(v)} <small>/ 4</small></div></div><button type="button" id="mobileSignalsToggle" class="mobile-signals-toggle" aria-expanded="false" aria-controls="mobileSignalsPanel">${lang('Signals','评估信号')} <span class="chevron" aria-hidden="true">⌄</span></button></div></div>`;
  const mobilePanel=`<section id="mobileSignalsPanel" class="mobile-signals-panel" role="dialog" aria-modal="true" aria-label="${lang('Assessment signals','评估信号')}"><div class="signals-screen-header"><strong>${lang('Assessment signals','评估信号')}</strong><button id="mobileSignalsClose" class="signals-close" type="button" aria-label="${lang('Close signals','关闭信号')}">×</button></div><div class="signal-group strength"><h3>${lang('Strength signals','优势信号')}</h3><div id="mobileStrengthSignals">${mobileStrengthSignalHTML(draft)}</div></div><div class="signal-group coaching"><h3>${lang('Coaching signals','辅导重点')}</h3><div id="mobileCoachingSignals">${coachingSignalHTML(draft)}</div></div></section>`;
@@ -487,14 +544,14 @@ function bindAssessment(){
  if(close)close.onclick=()=>closeMobileSignals();
  document.querySelectorAll('[data-rate]').forEach(el=>el.onclick=()=>{
   closeMobileSignals();
-  draft.ratings[el.dataset.rate]=el.dataset.value;dirty=true;render();
+  draft.ratings[el.dataset.rate]=el.dataset.value;scheduleAssessmentAutosave();render();
  });
  document.querySelectorAll('[data-note]').forEach(el=>el.oninput=()=>{
-  draft.notes[el.dataset.note]=el.value;dirty=true;
+  draft.notes[el.dataset.note]=el.value;scheduleAssessmentAutosave();
   const signals=document.getElementById('coachingSignals');
   if(signals)signals.innerHTML=coachingSignalHTML(draft);
   refreshMobileSignals();
- });[['aDate','date'],['aAssessor','assessor']].forEach(([id,field])=>{let e=document.getElementById(id);if(e)e.oninput=()=>{draft[field]=e.value;dirty=true}});const setCycle=()=>{draft.quarter='Q'+document.getElementById('aQuarter').value+' '+document.getElementById('aYear').value;dirty=true};document.getElementById('aQuarter')?.addEventListener('change',setCycle);document.getElementById('aYear')?.addEventListener('change',setCycle)}
+ });[['aDate','date'],['aAssessor','assessor']].forEach(([id,field])=>{let e=document.getElementById(id);if(e)e.oninput=()=>{draft[field]=e.value;scheduleAssessmentAutosave()}});const setCycle=()=>{draft.quarter='Q'+document.getElementById('aQuarter').value+' '+document.getElementById('aYear').value;scheduleAssessmentAutosave()};document.getElementById('aQuarter')?.addEventListener('change',setCycle);document.getElementById('aYear')?.addEventListener('change',setCycle)}
 function reportText(s,limit=360){const raw=String(s||'').trim().replace(/\s+/g,' ');return esc(raw.length>limit?raw.slice(0,limit-1).trimEnd()+'…':raw)}
 function printStaffReport(a){
  if(!a)return;
@@ -535,7 +592,9 @@ function printStaffReport(a){
  window.print();
 }
 function action(act){if(act==='add-person')return editPersonModal();if(act==='edit-person')return editPersonModal(person(state.personId));if(act==='back-person')return navigate('person',state.personId);if(act==='save-draft')return saveAssessment(false);if(act==='finalize')return saveAssessment(true);if(act==='print-assess')return printStaffReport(draft);if(act==='export')return exportJSON();if(act==='import')return importJSON();if(act==='clear-all')return clearAll()}
-function saveAssessment(final){if(final){if(!draft.date)return alert('Set an assessment date.');if(!draft.assessor.trim())return alert('Enter the assessor name.');if(scored(draft)<12&&!confirm(`Only ${scored(draft)} of ${assessmentItems(draft).length} criteria are scored. Complete this assessment anyway?`))return;let missingEvidence=getGaps(draft).filter(it=>!draft.notes[it.id]?.trim());if(missingEvidence.length){const first=missingEvidence[0];alert(assessmentLanguage==='zh'?`有 ${missingEvidence.length} 项评分为 1 或 2，但缺少观察记录。完成评估前必须填写。`:`${missingEvidence.length} criteria rated 1 or 2 are missing observations. Add a written observation for each before completing the assessment.`);const target=document.querySelector(`[data-criterion=\"${first.id}\"]`);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});const detail=target.querySelector('details');if(detail)detail.open=true;target.querySelector('textarea')?.focus({preventScroll:true})}return;}draft.status='final'}else draft.status='draft';draft.quarter=draft.quarter.trim()||quarter(draft.date);draft.updatedAt=new Date().toISOString();let idx=data.assessments.findIndex(a=>a.id===draft.id);if(idx<0)return;data.assessments[idx]=structuredClone(draft);if(!persist())return;dirty=false;toast(final?'Assessment saved':'Draft saved');navigate('person',draft.personId,null,final?'overview':'history')}
+function saveAssessment(final){if(final){if(!draft.date)return alert('Set an assessment date.');if(!draft.assessor.trim())return alert('Enter the assessor name.');if(scored(draft)<12&&!confirm(`Only ${scored(draft)} of ${assessmentItems(draft).length} criteria are scored. Complete this assessment anyway?`))return;let missingEvidence=getGaps(draft).filter(it=>!draft.notes[it.id]?.trim());if(missingEvidence.length){const first=missingEvidence[0];alert(assessmentLanguage==='zh'?`有 ${missingEvidence.length} 项评分为 1 或 2，但缺少观察记录。完成评估前必须填写。`:`${missingEvidence.length} criteria rated 1 or 2 are missing observations. Add a written observation for each before completing the assessment.`);const target=document.querySelector(`[data-criterion=\"${first.id}\"]`);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});const detail=target.querySelector('details');if(detail)detail.open=true;target.querySelector('textarea')?.focus({preventScroll:true})}return;}draft.status='final'}else draft.status='draft';draft.quarter=draft.quarter.trim()||quarter(draft.date);draft.updatedAt=new Date().toISOString();let idx=data.assessments.findIndex(a=>a.id===draft.id);if(idx<0)return;data.assessments[idx]=structuredClone(draft);clearTimeout(assessmentAutoTimer);assessmentAutoTimer=null;assessmentAutoPending=false;
+ if(!persist())return;
+ clearAssessmentRecovery(draft.id);dirty=false;toast(final?'Assessment saved':'Draft saved');navigate('person',draft.personId,null,final?'overview':'history')}
 function editPersonModal(p){const editing=!!p;let m=document.getElementById('modalRoot');m.innerHTML=`<div class="modal-bg"><div class="modal"><h2>${editing?'Edit team member':'Add team member'}</h2><form id="personForm"><div class="field"><label>Name</label><input name="name" required maxlength="80" value="${esc(p?.name||'')}" placeholder="Team member name"></div><div class="field" style="margin-top:13px"><label>Role</label><select name="role"><option ${(!p||p.role==='Barista')?'selected':''}>Barista</option><option ${p?.role==='Shift Lead'?'selected':''}>Shift Lead</option><option ${p?.role==='Manager'?'selected':''}>Manager</option><option ${p?.role==='Other'?'selected':''}>Other</option></select></div><div class="form-actions"><button class="btn black" type="submit">${editing?'Save profile':'Add team member'}</button><button class="btn" type="button" id="cancelModal">Cancel</button>${editing?'<button class="btn danger" type="button" id="deletePerson">Delete profile</button>':''}</div></form></div></div>`;document.getElementById('cancelModal').onclick=()=>m.innerHTML='';document.getElementById('personForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),name=f.get('name').trim();if(!name)return;if(editing){p.name=name;p.role=f.get('role')}else{p={id:uid(),name,role:f.get('role'),createdAt:new Date().toISOString()};data.people.push(p)}persist();m.innerHTML='';navigate('person',p.id);toast('Profile saved')};if(editing)document.getElementById('deletePerson').onclick=()=>{let n=data.assessments.filter(a=>a.personId===p.id).length;if(!confirm(`Delete ${p.name} and all ${n} associated assessments? This cannot be undone unless you have a JSON backup.`))return;data.people=data.people.filter(x=>x.id!==p.id);data.assessments=data.assessments.filter(a=>a.personId!==p.id);persist();m.innerHTML='';navigate('dashboard')}}
 function deleteAssessment(id){let a=data.assessments.find(a=>a.id===id);if(!a)return;if(!confirm('Permanently delete this assessment? Export a backup first if needed.'))return;data.assessments=data.assessments.filter(x=>x.id!==id);persist();render();toast('Assessment removed')}
 function exportJSON(){let content=JSON.stringify(data,null,2),blob=new Blob([content],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='YIHUI_Calibration_Backup_'+dateNow()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);toast('JSON backup downloaded')}
@@ -549,23 +608,25 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){
  escapeSide();
 }});
 document.getElementById('addPersonSide').addEventListener('click',escapeSide);
-window.matchMedia('(min-width:731px)').addEventListener('change',e=>{if(e.matches)escapeSide()});window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});window.addEventListener('popstate',restoreBrowserRoute);
+window.matchMedia('(min-width:731px)').addEventListener('change',e=>{if(e.matches)escapeSide()});window.addEventListener('beforeunload',()=>{if(state.view==='assessment')rememberAssessmentDraft()});window.addEventListener('popstate',restoreBrowserRoute);
 window.addEventListener('scroll',updateMobileScorePosition,{passive:true});
 window.addEventListener('resize',updateMobileScorePosition,{passive:true});
 window.visualViewport?.addEventListener('resize',updateMobileScorePosition,{passive:true});
 window.__calibrationCloudBoot=function(remote){
   if(!remote||!Array.isArray(remote.people)||!Array.isArray(remote.assessments))remote={version:1,people:[],assessments:[],updatedAt:null};
   data=remote;draft=null;dirty=false;
+  const recovered=restoreRecoveredAssessment(remote);
   try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
   state={...state,...routeFromHash()};
   if(state.personId&&!person(state.personId))state={view:'dashboard',personId:null,assessmentId:null,tab:'overview',filter:'all'};
   if(state.assessmentId&&!data.assessments.some(a=>a.id===state.assessmentId))state={...state,view:'person',assessmentId:null};
   if(state.view==='assessment'){const a=data.assessments.find(x=>x.id===state.assessmentId);if(a){draft=structuredClone(a)}else state={...state,view:'dashboard'}}
   setRoute(state,true);render();
-  document.getElementById('saveState').textContent='Synced with Firebase';
+  document.getElementById('saveState').textContent=recovered?'Recovered unsynced draft · syncing…':'Synced with Firebase';
+  if(recovered)setTimeout(flushAssessmentAutosave,100);
 };
 window.__calibrationCloudRemote=function(remote){
-  if(dirty||state.view==='assessment'){document.getElementById('saveState').textContent='Cloud updated · reopen to refresh';return;}
+  if(dirty||assessmentAutoPending||state.view==='assessment'){document.getElementById('saveState').textContent='Cloud updated · reopen to refresh';return;}
   data=remote;try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){};
   render();document.getElementById('saveState').textContent='Synced with Firebase';
 };
