@@ -294,7 +294,7 @@ function restoreRecoveredAssessment(remote){
  const i=data.assessments.findIndex(a=>a.id===recovery.id);
  if(i<0){try{localStorage.removeItem(ASSESSMENT_RECOVERY_KEY)}catch(e){}return false}
  const existing=data.assessments[i],recovered=recovery.assessment;
- if(recovered.personId!==existing.personId||existing.status==='final')return false;
+ if(recovered.personId!==existing.personId)return false;
  if(Date.parse(recovery.savedAt||0)<=Date.parse(existing.updatedAt||0)){
   try{localStorage.removeItem(ASSESSMENT_RECOVERY_KEY)}catch(e){}
   return false;
@@ -608,7 +608,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){
  escapeSide();
 }});
 document.getElementById('addPersonSide').addEventListener('click',escapeSide);
-window.matchMedia('(min-width:731px)').addEventListener('change',e=>{if(e.matches)escapeSide()});window.addEventListener('beforeunload',()=>{if(state.view==='assessment')rememberAssessmentDraft()});window.addEventListener('popstate',restoreBrowserRoute);
+window.matchMedia('(min-width:731px)').addEventListener('change',e=>{if(e.matches)escapeSide()});window.addEventListener('beforeunload',()=>{if(state.view==='assessment'&&assessmentAutoPending){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}}});window.addEventListener('popstate',restoreBrowserRoute);
 window.addEventListener('scroll',updateMobileScorePosition,{passive:true});
 window.addEventListener('resize',updateMobileScorePosition,{passive:true});
 window.visualViewport?.addEventListener('resize',updateMobileScorePosition,{passive:true});
