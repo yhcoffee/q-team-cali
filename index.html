@@ -205,13 +205,22 @@ body.cloud-locked .app{display:none!important}
  .staff-thanks-subtitle{color:#575d57;font-size:8pt;line-height:1.35}
  .staff-thanks-observation{margin-top:2mm!important;border-top:1px solid #dfe8df;padding-top:2mm}
 }
+.brand-home{display:inline-block;text-decoration:none;color:inherit}
+.brand-home:hover{color:#555}
+.brand-home:focus-visible{outline:2px solid #444;outline-offset:4px;border-radius:2px}
+.activity-scroll{overflow:auto;max-width:100%}
+.activity-table{width:100%;border-collapse:collapse;font-size:12px;text-align:left;min-width:630px}
+.activity-table th{font-size:10px;text-transform:uppercase;letter-spacing:.075em;color:#888;background:#f7f7f5;font-weight:700}
+.activity-table th,.activity-table td{padding:12px 10px;border-bottom:1px solid #eaeae8;vertical-align:top}
+.activity-table td:first-child{font-weight:600}
+.activity-table tr:last-child td{border-bottom:0}
 </style>
 </head>
-<body class="cloud-locked"><div id="cloudAuth" class="cloud-auth"><div class="cloud-login"><h1>YIHUI</h1><div class="tiny">TEAM CALIBRATION · MANAGER ACCESS</div><p>Sign in with an approved management account to access team assessments.</p><form id="cloudLoginForm"><label>Email<input id="cloudEmail" type="email" autocomplete="username" required></label><label>Password<input id="cloudPassword" type="password" autocomplete="current-password" required></label><button id="cloudLoginButton" type="submit">Sign in</button></form><div class="cloud-message" id="cloudMessage" role="status">Connecting to Firebase…</div><button id="cloudSignOut" type="button" style="background:#eee;color:#222;margin-top:12px;display:none">Sign out / switch account</button></div></div><div class="app"><aside id="sidebar"><div class="sidebar-head-mobile"><div class="brand">YIHUI</div><button id="closeMenu" class="mobile-menu-close" type="button" aria-label="Close menu">×</button></div><div class="aside-label"><span class="tiny">TEAM CALIBRATION</span></div><button class="side-link" id="dashboardLink"><span style="font-size:17px">▦</span><span class="side-name">Overview</span></button><div class="aside-label"><span class="tiny">TEAM MEMBERS</span><button class="iconbtn" id="addPersonSide" title="Add team member">＋</button></div><div class="side-list" id="peopleList"></div><div class="side-footer"><button class="side-link" id="settingsLink"><span>⚙</span><span>Data & backup</span></button><div class="light" style="padding:0 11px">Saved in this browser · export backups regularly</div></div></aside><div id="sidebarScrim" class="sidebar-scrim" aria-hidden="true"></div><main class="main"><div class="topbar"><div class="actions"><button class="btn small sidebar-toggle" id="menuButton">☰ Menu</button><span class="breadcrumbs" id="breadcrumbs">Overview</span></div><div class="actions"><span class="pill" id="saveState" style="display:none" aria-hidden="true">Local storage</span><button type="button" class="language-toggle" id="languageToggle" style="display:none" aria-label="Switch assessment language between English and Chinese" aria-pressed="false" title="English / 中文"><span>EN</span><span>中文</span></button><span class="cloud-user" id="cloudUser"></span></div></div><div id="content"></div><div class="footer-note">YIHUI · TEAM CALIBRATION · Management use only · <span class="app-version" id="appVersion" title="Team Calibration app version">v1.24</span></div></main></div><div id="modalRoot"></div><div id="toastRoot"></div>
+<body class="cloud-locked"><div id="cloudAuth" class="cloud-auth"><div class="cloud-login"><h1>YIHUI</h1><div class="tiny">TEAM CALIBRATION · MANAGER ACCESS</div><p>Sign in with an approved management account to access team assessments.</p><form id="cloudLoginForm"><label>Email<input id="cloudEmail" type="email" autocomplete="username" required></label><label>Password<input id="cloudPassword" type="password" autocomplete="current-password" required></label><button id="cloudLoginButton" type="submit">Sign in</button></form><div class="cloud-message" id="cloudMessage" role="status">Connecting to Firebase…</div><button id="cloudSignOut" type="button" style="background:#eee;color:#222;margin-top:12px;display:none">Sign out / switch account</button></div></div><div class="app"><aside id="sidebar"><div class="sidebar-head-mobile"><a class="brand brand-home" href="https://yhcoffee.github.io/" aria-label="YIHUI home">YIHUI</a><button id="closeMenu" class="mobile-menu-close" type="button" aria-label="Close menu">×</button></div><div class="aside-label"><span class="tiny">TEAM CALIBRATION</span></div><button class="side-link" id="dashboardLink"><span style="font-size:17px">▦</span><span class="side-name">Overview</span></button><div class="aside-label"><span class="tiny">TEAM MEMBERS</span><button class="iconbtn" id="addPersonSide" title="Add team member">＋</button></div><div class="side-list" id="peopleList"></div><div class="side-footer"><button class="side-link" id="settingsLink"><span>⚙</span><span>Data & backup</span></button><div class="light" style="padding:0 11px">Saved in this browser · export backups regularly</div></div></aside><div id="sidebarScrim" class="sidebar-scrim" aria-hidden="true"></div><main class="main"><div class="topbar"><div class="actions"><button class="btn small sidebar-toggle" id="menuButton">☰ Menu</button><span class="breadcrumbs" id="breadcrumbs">Overview</span></div><div class="actions"><span class="pill" id="saveState" style="display:none" aria-hidden="true">Local storage</span><button type="button" class="language-toggle" id="languageToggle" style="display:none" aria-label="Switch assessment language between English and Chinese" aria-pressed="false" title="English / 中文"><span>EN</span><span>中文</span></button><span class="cloud-user" id="cloudUser"></span></div></div><div id="content"></div><div class="footer-note">YIHUI · TEAM CALIBRATION · Management use only · <span class="app-version" id="appVersion" title="Team Calibration app version">v1.25</span></div></main></div><div id="modalRoot"></div><div id="toastRoot"></div>
 <div id="staffPrintRoot" aria-hidden="true"></div>
 <script>
 'use strict';
-const APP_VERSION='1.24';
+const APP_VERSION='1.25';
 const KEY='yihui_calibration_v1';
 const ASSESSMENT_RECOVERY_KEY='yihui_calibration_assessment_recovery_v1';
 const DOMAINS=[
@@ -510,7 +519,7 @@ function renderAssessment(){
  const mobilePanel=`<section id="mobileSignalsPanel" class="mobile-signals-panel" role="dialog" aria-modal="true" aria-label="${lang('Assessment signals','评估信号')}"><div class="signals-screen-header"><strong>${lang('Assessment signals','评估信号')}</strong><button id="mobileSignalsClose" class="signals-close" type="button" aria-label="${lang('Close signals','关闭信号')}">×</button></div><div class="signal-group strength"><h3>${lang('Strength signals','优势信号')}</h3><div id="mobileStrengthSignals">${mobileStrengthSignalHTML(draft)}</div></div><div class="signal-group coaching"><h3>${lang('Coaching signals','辅导重点')}</h3><div id="mobileCoachingSignals">${coachingSignalHTML(draft)}</div></div></section>`;
  return `${header}${mobileSummary}<div class="assess-grid"><div>${dateFields}${domains}${buttons}</div>${sidebar}</div>${mobilePanel}`;
 }
-function renderSettings(){return `${pageTitle('Data & backup','Manage secure cloud records and JSON backups.')}<div class="grid two"><div class="panel"><div class="section-title"><h2>Backup & restore</h2></div><p>Team records are stored in Firebase and shared with authorized management accounts. Export JSON periodically as an additional backup.</p><div class="form-actions"><button class="btn black" data-action="export">Download JSON backup</button><button class="btn" data-action="import">Import JSON backup</button></div><p class="light">Import replaces the shared Firebase dataset for all managers after confirmation. Export first if you want to keep a copy of the current state.</p></div><div class="panel"><div class="section-title"><h2>Records</h2></div><div class="stat-line"><span>Baristas</span><b>${data.people.length}</b></div><div class="stat-line"><span>Assessments</span><b>${data.assessments.length}</b></div><div class="stat-line"><span>Last saved</span><b>${data.updatedAt?new Date(data.updatedAt).toLocaleString():'Not yet'}</b></div><div class="form-actions"><button class="btn danger" data-action="clear-all">Delete all cloud data</button></div></div></div><div class="panel" style="margin-top:15px"><div class="section-title"><h2>About the records</h2></div><p class="muted">Each barista has a stable profile. Assessments are stored separately with their own date, quarter, scores, notes, and improvement actions. Trend calculations compare only criteria actually scored in both completed assessments; No Observation answers are excluded. Completed assessments can be edited and retained for quarterly comparison.</p><p class="muted">This hosted version requires Firebase sign-in and an approved manager account. Signed-in managers share the same records. Avoid editing the same assessment simultaneously on multiple devices.</p></div>`}
+function renderSettings(){return `${pageTitle('Data & backup','Manage secure cloud records and JSON backups.')}<div class="grid two"><div class="panel"><div class="section-title"><h2>Backup & restore</h2></div><p>Team records are stored in Firebase and shared with authorized management accounts. Export JSON periodically as an additional backup.</p><div class="form-actions"><button class="btn black" data-action="export">Download JSON backup</button><button class="btn" data-action="import">Import JSON backup</button></div><p class="light">Import replaces the shared Firebase dataset for all managers after confirmation. Export first if you want to keep a copy of the current state.</p></div><div class="panel"><div class="section-title"><h2>Records</h2></div><div class="stat-line"><span>Baristas</span><b>${data.people.length}</b></div><div class="stat-line"><span>Assessments</span><b>${data.assessments.length}</b></div><div class="stat-line"><span>Last saved</span><b>${data.updatedAt?new Date(data.updatedAt).toLocaleString():'Not yet'}</b></div><div class="form-actions"><button class="btn danger" data-action="clear-all">Delete all cloud data</button></div></div></div><section class="panel" style="margin-top:15px"><div class="section-title"><h2>Login activity</h2><span class="pill">${(data.loginActivity||[]).length} sessions</span></div><p class="muted" style="margin:0 0 14px">Authorized account sessions recorded from this version onward. Location shows the browser-reported time zone, not a verified physical location or GPS position.</p><div class="activity-scroll"><table class="activity-table"><thead><tr><th>Account</th><th>When</th><th>Where (time zone)</th><th>Device / browser</th></tr></thead><tbody>${(data.loginActivity||[]).length?(data.loginActivity||[]).slice().reverse().slice(0,100).map(x=>`<tr><td>${esc(x.email||'Unknown')}</td><td>${esc(new Date(x.at).toLocaleString())}</td><td>${esc(x.timezone||'Unavailable')}</td><td>${esc(x.device||'Unknown device')}</td></tr>`).join(''):'<tr><td colspan="4" class="muted">No session activity recorded yet.</td></tr>'}</tbody></table></div><p class="muted" style="margin:10px 0 0;font-size:11px">Only successful authorized sessions are included. Previous logins are unavailable. Latest 100 sessions are retained.</p></section><div class="panel" style="margin-top:15px"><div class="section-title"><h2>About the records</h2></div><p class="muted">Each barista has a stable profile. Assessments are stored separately with their own date, quarter, scores, notes, and improvement actions. Trend calculations compare only criteria actually scored in both completed assessments; No Observation answers are excluded. Completed assessments can be edited and retained for quarterly comparison.</p><p class="muted">This hosted version requires Firebase sign-in and an approved manager account. Signed-in managers share the same records. Avoid editing the same assessment simultaneously on multiple devices.</p></div>`}
 function bindContent(){document.querySelectorAll('[data-action]').forEach(el=>el.onclick=()=>action(el.dataset.action));document.querySelectorAll('[data-open-person]').forEach(el=>el.onclick=()=>navigate('person',el.dataset.openPerson));document.querySelectorAll('[data-new-assess]').forEach(el=>el.onclick=()=>startAssessment(el.dataset.newAssess));document.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>navigate('person',state.personId,null,el.dataset.tab));document.querySelectorAll('[data-view-assess],[data-edit-assess]').forEach(el=>el.onclick=()=>openAssessment(el.dataset.viewAssess||el.dataset.editAssess));document.querySelectorAll('[data-delete-assess]').forEach(el=>el.onclick=()=>deleteAssessment(el.dataset.deleteAssess));document.querySelectorAll('[data-print-plan]').forEach(el=>el.onclick=()=>{const a=data.assessments.find(x=>x.id===el.dataset.printPlan);if(a)printStaffReport(a)});if(state.view==='assessment')bindAssessment();bindBaristaDrag()}
 let draggedPersonId=null;
 function moveBarista(sourceId,targetId){if(!sourceId||!targetId||sourceId===targetId)return;const from=data.people.findIndex(p=>p.id===sourceId),to=data.people.findIndex(p=>p.id===targetId);if(from<0||to<0)return;const [moved]=data.people.splice(from,1);data.people.splice(to,0,moved);persist();render();toast('Barista order saved')}
@@ -655,6 +664,12 @@ window.matchMedia('(min-width:731px)').addEventListener('change',e=>{if(e.matche
 window.addEventListener('scroll',updateMobileScorePosition,{passive:true});
 window.addEventListener('resize',updateMobileScorePosition,{passive:true});
 window.visualViewport?.addEventListener('resize',updateMobileScorePosition,{passive:true});
+window.__calibrationLoginActivity=function(activity){
+ if(!Array.isArray(activity))return;
+ data.loginActivity=activity;
+ try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}
+ if(state.view==='settings')render();
+};
 window.__calibrationCloudBoot=function(remote){
   if(!remote||!Array.isArray(remote.people)||!Array.isArray(remote.assessments))remote={version:1,people:[],assessments:[],updatedAt:null};
   data=remote;draft=null;dirty=false;
@@ -677,7 +692,7 @@ window.__calibrationCloudRemote=function(remote){
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc, runTransaction, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 const firebaseConfig = {
   apiKey: "AIzaSyA_-LUjqlIazmypF1TMZqqrBB5TjLmdRbI",
   authDomain: "q-team-cali.firebaseapp.com",
@@ -692,11 +707,42 @@ const form=$('cloudLoginForm');
 const submit=$('cloudLoginButton');
 let auth, db, unsub=null, ready=false, saving=Promise.resolve(), pending=0, version=0, lastRemote='';
 const datasetRef=()=>doc(db,'calibration','team');
+function deviceLabel(){
+ const ua=navigator.userAgent||'';
+ const os=/iPhone|iPad|iPod/i.test(ua)?'iOS / iPadOS':/Android/i.test(ua)?'Android':/Windows NT/i.test(ua)?'Windows':/Macintosh|Mac OS X/i.test(ua)?'macOS':/Linux/i.test(ua)?'Linux':'Other device';
+ const browser=/Edg\//.test(ua)?'Edge':/Firefox\//.test(ua)?'Firefox':/CriOS\//.test(ua)?'Chrome (iOS)':/Chrome\//.test(ua)?'Chrome':/Safari\//.test(ua)?'Safari':'Other browser';
+ return os+' · '+browser;
+}
+function accessEntry(user){
+ let timezone='Unavailable';
+ try{timezone=Intl.DateTimeFormat().resolvedOptions().timeZone||'Unavailable'}catch(e){}
+ return {id:crypto.randomUUID(),uid:user.uid,email:user.email||'Manager',at:new Date().toISOString(),timezone,device:deviceLabel()};
+}
+async function recordAccess(user){
+ const key='yihui_team_calibration_access_'+user.uid;
+ if(sessionStorage.getItem(key))return;
+ const entry=accessEntry(user);
+ try{
+  const updated=await runTransaction(db,async transaction=>{
+   const snap=await transaction.get(datasetRef());
+   const prior=snap.exists()?snap.data().payload:null;
+   if(!validate(prior))return null;
+   const activity=Array.isArray(prior.loginActivity)?prior.loginActivity:[];
+   const payload={...prior,loginActivity:[...activity,entry].slice(-100)};
+   transaction.set(datasetRef(),{payload,updatedAt:serverTimestamp()});
+   return payload;
+  });
+  if(updated){
+   sessionStorage.setItem(key,'1');
+   window.__calibrationLoginActivity?.(updated.loginActivity);
+  }
+ }catch(e){console.warn('Session activity could not be recorded:',e)}
+}
 function validate(v){return v&&Array.isArray(v.people)&&Array.isArray(v.assessments)}
 function setStatus(v){$('saveState').textContent=v}
 function appLock(){document.body.classList.add('cloud-locked');$('cloudAuth').style.display='grid';ready=false;$('cloudUser').innerHTML=''}
 $('cloudSignOut').onclick=()=>signOut(auth); 
-function appOpen(user,initial){document.body.classList.remove('cloud-locked');$('cloudAuth').style.display='none';$('cloudUser').innerHTML='';const email=document.createElement('span');email.textContent=user.email||'Manager';const btn=document.createElement('button');btn.type='button';btn.textContent='Sign out';btn.onclick=()=>{if(pending&&!confirm('A save may still be syncing. Sign out anyway?'))return;signOut(auth)};$('cloudUser').append(email,btn);window.__calibrationCloudBoot(initial);ready=true}
+function appOpen(user,initial){document.body.classList.remove('cloud-locked');$('cloudAuth').style.display='none';$('cloudUser').innerHTML='';const email=document.createElement('span');email.textContent=user.email||'Manager';const btn=document.createElement('button');btn.type='button';btn.textContent='Sign out';btn.onclick=()=>{if(pending&&!confirm('A save may still be syncing. Sign out anyway?'))return;signOut(auth)};$('cloudUser').append(email,btn);window.__calibrationCloudBoot(initial);ready=true;recordAccess(user)}
 function errorText(e){const code=e?.code||'';if(code.includes('invalid-credential')||code.includes('wrong-password'))return 'Incorrect email or password.';if(code==='auth/unauthorized-domain')return 'Add your GitHub Pages hostname to Firebase Authentication → Authorized domains.';return e?.message||String(e)}
 try{
  const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
@@ -709,7 +755,12 @@ try{
   version++;pending++;setStatus('Syncing to Firebase…');
   const current=version;
   saving=saving.catch(()=>{}).then(async()=>{
-    await setDoc(datasetRef(),{payload:snapshot,updatedAt:serverTimestamp()});
+    await runTransaction(db,async transaction=>{
+     const snap=await transaction.get(datasetRef());
+     const currentPayload=snap.exists()?snap.data().payload:null;
+     const loginActivity=Array.isArray(currentPayload?.loginActivity)?currentPayload.loginActivity:[];
+     transaction.set(datasetRef(),{payload:{...snapshot,loginActivity},updatedAt:serverTimestamp()});
+   });
     lastRemote=JSON.stringify(snapshot);
   }).then(()=>{pending--;if(!pending&&current===version)setStatus('Synced with Firebase')},err=>{
     pending--;setStatus('Sync failed — export backup');
